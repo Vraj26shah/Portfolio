@@ -554,9 +554,9 @@ function DeepStarfield() {
   const layers = useMemo(() => {
     // [count, xzSpread, zMin, zMax, size, color, opacity, parallaxY, driftSpeed]
     const specs = [
-      { n: 680, spread: 56, zMin: 22, zMax: 50, sz: 0.008, col: "#3a5f88", op: 0.22, prlx: 0.4, spd: 0.0028 },
-      { n: 430, spread: 42, zMin: 11, zMax: 22, sz: 0.014, col: "#7aabcc", op: 0.36, prlx: 1.0, spd: 0.0065 },
-      { n: 170, spread: 28, zMin: 4,  zMax: 11, sz: 0.020, col: "#b8d8f0", op: 0.50, prlx: 1.8, spd: 0.0120 },
+      { n: 340, spread: 56, zMin: 22, zMax: 50, sz: 0.008, col: "#3a5f88", op: 0.22, prlx: 0.4, spd: 0.0028 },
+      { n: 215, spread: 42, zMin: 11, zMax: 22, sz: 0.014, col: "#7aabcc", op: 0.36, prlx: 1.0, spd: 0.0065 },
+      { n: 85,  spread: 28, zMin: 4,  zMax: 11, sz: 0.020, col: "#b8d8f0", op: 0.50, prlx: 1.8, spd: 0.0120 },
     ] as const;
 
     return specs.map(({ n, spread, zMin, zMax, sz, col, op, prlx, spd: speed }) => {
@@ -734,7 +734,7 @@ function SceneContent() {
   const pktDummy = useMemo(() => new THREE.Object3D(), []);
   const pktProg  = useRef(Array.from({ length: MAX_EDGES }, (_, i) => i / MAX_EDGES));
   const pktSpeed = useMemo(
-    () => Array.from({ length: MAX_EDGES }, (_, i) => 0.042 + (i * 0.011) % 0.058),
+    () => Array.from({ length: MAX_EDGES }, (_, i) => 0.15 + (i * 0.011) % 0.058),
     [],
   );
   const prevKey = useRef("home");
