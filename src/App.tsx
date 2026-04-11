@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ScrollSmoother } from "gsap/ScrollSmoother";
 import {
   FiArrowRight,
   FiArrowDownRight,
@@ -16,13 +15,14 @@ import {
   FiInstagram,
   FiLinkedin,
   FiMail,
+  FiMaximize2,
+  FiX,
 } from "react-icons/fi";
 import { FaMedium } from "react-icons/fa6";
-import HeroScene, { scrollState } from "./components/HeroScene";
 import TechStack from "./components/TechStack";
 import "./App.css";
 
-gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollSmoother);
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -81,62 +81,80 @@ const services = [
   },
 ];
 
-const projects = [
+const projects: {
+  index: string;
+  category: string;
+  title: string;
+  description: string;
+  insight: string;
+  tech: string[];
+  highlights: string[];
+  link: string;
+  liveUrl?: string;
+  imageSrc: string;
+  imageAlt: string;
+}[] = [
   {
     index: "01",
     category: "Academic Resource Platform",
     title: "ScholarStack",
     description: "Linux-hosted academic resource platform sustaining 99%+ uptime for 500+ concurrent users and generating ₹10,000+ monthly revenue with zero external IT support.",
-    insight: "Built and operated end-to-end — from DNS config and SSL certificates to Nginx reverse-proxy and automated Cron Jobs — all on a bare Linux server.",
+    insight: "Built and operated end-to-end, from DNS configuration and SSL certificates to reverse proxying and automation on a bare Linux server.",
     tech: ["Linux", "Nginx", "Python", "Bash", "Certbot", "DNS", "Cron Jobs"],
-    visualLabel: "Readable student workflow",
-    visualText: "Structured navigation, dependable delivery, and a calmer product surface for study resources.",
+    highlights: ["Runs on a self-managed Linux setup", "Student-focused delivery flow", "Stable operations with zero external IT support"],
     link: "https://github.com/Vraj26shah/vitbsmashers",
     liveUrl: "https://vitbsmasher.vercel.app/",
+    imageSrc: "/project-screenshot-03.png",
+    imageAlt: "ScholarStack project architecture screenshot",
   },
   {
     index: "02",
     category: "AI Agent Orchestration",
     title: "AgentForge",
-    description: "Full-stack AI agent orchestration platform with ArmorIQ security — cryptographically signed intent tokens, real-time policy enforcement, and multi-agent task execution.",
-    insight: "Four specialised agents (Analyzer, Executor, Validator, Reporter) coordinate over WebSocket with complete audit trails and fail-closed security policy.",
+    description: "Full-stack AI agent orchestration platform with ArmorIQ security, signed intent tokens, real-time policy enforcement, and multi-agent task execution.",
+    insight: "Four specialised agents coordinate through a controlled orchestration layer with complete auditability and fail-closed verification.",
     tech: ["FastAPI", "React", "TypeScript", "Claude AI", "Docker", "SpacetimeDB", "JWT"],
-    visualLabel: "Multi-agent coordination",
-    visualText: "Secure agent pipelines with intent verification and real-time synchronisation.",
+    highlights: ["Planner and tool agents coordinated centrally", "Realtime task state and audits", "Security checks before execution"],
     link: "https://github.com/Vraj26shah/agentforge",
+    imageSrc: "/project-screenshot-04.png",
+    imageAlt: "AgentForge project architecture screenshot",
   },
   {
     index: "03",
     category: "Infrastructure & CI/CD",
     title: "DevOps Engineering Lab",
-    description: "Production-grade CI/CD pipelines, Docker containers, Prometheus + Grafana monitoring stacks on AWS EC2 with automated deployment and alerting.",
-    insight: "It reflects the part of engineering I enjoy most: making systems repeatable, measurable, and easier to operate over time.",
+    description: "Production-grade CI/CD pipelines, Docker containers, Prometheus and Grafana monitoring stacks on AWS EC2 with automated deployment and alerting.",
+    insight: "This project is about making systems repeatable, observable, and easier to operate over time through delivery automation and monitoring.",
     tech: ["Docker", "GitHub Actions", "Prometheus", "Grafana", "AWS EC2", "Bash"],
-    visualLabel: "Ops visibility",
-    visualText: "Automation, monitoring, and deployment checkpoints arranged like a working control surface.",
+    highlights: ["CI build and publish workflow", "Monitoring stack on EC2", "Metrics, dashboards, and alerts in one flow"],
     link: "https://github.com/Vraj26shah/Devops-aws-",
+    imageSrc: "/project-screenshot-05.png",
+    imageAlt: "DevOps Engineering Lab project architecture screenshot",
   },
   {
     index: "04",
     category: "Security & Networking",
     title: "Network Traffic Analyser",
-    description: "Analyses network packets to detect anomalies and identify IP/MAC spoofing — traces attacker addresses and visualises protocol breakdowns with Pandas and Matplotlib.",
-    insight: "This is where my curiosity for TCP/IP, scanning, and troubleshooting becomes visible in a more technical, systems-oriented format.",
+    description: "Analyses network packets to detect anomalies and identify IP/MAC spoofing, traces attacker addresses, and visualises protocol breakdowns with Pandas and Matplotlib.",
+    insight: "This project shows packet-level thinking clearly, from capture and parsing to spoof detection and exportable investigation outputs.",
     tech: ["Python", "Scapy", "Wireshark", "TCP/IP", "ARP", "Nmap"],
-    visualLabel: "Packet-level view",
-    visualText: "Traffic interpretation, signal tracing, and protocol awareness presented as a technical story.",
+    highlights: ["Raw frame capture and parsing", "Spoof detection through ARP mismatch analysis", "Charts, logs, and pcap export from one CLI"],
     link: "https://github.com/Vraj26shah/NetworkAnalyzer",
+    imageSrc: "/project-screenshot-02.png",
+    imageAlt: "Network Traffic Analyser project architecture screenshot",
   },
   {
     index: "05",
     category: "Research & Machine Learning",
     title: "Mentorship Algorithm",
-    description: "A research-led build exploring recommendation logic, data profiling, and decision pathways for better mentorship matching using genetic programming.",
-    insight: "It highlights how I approach problem framing when the answer is not purely visual and needs a stronger analytical backbone.",
+    description: "Research-led build exploring recommendation logic, data profiling, and decision pathways for better mentorship matching using genetic programming.",
+    insight: "It highlights how I frame analytical problems when the solution needs stronger data logic and decision modelling rather than only frontend polish.",
     tech: ["Decision Trees", "Genetic Programming", "Python", "Data Profiling"],
-    visualLabel: "Analytical decision flow",
-    visualText: "A project shaped around logic, evaluation, and how structured data can guide better recommendations.",
-    link: "https://github.com/Vraj26shah/fathersadvice1",
+    highlights: ["Research-driven recommendation logic", "Structured profiling and matching flow", "Decision-focused architecture thinking"],
+    link: "https://github.com/Vraj26shah/fathersadvice_final",
+    liveUrl: "https://fathersadvice-final.onrender.com",
+    imageSrc: "/project-screenshot-mentorship.svg",
+    imageAlt: "Mentorship Algorithm project architecture diagram",
   },
   {
     index: "06",
@@ -145,21 +163,23 @@ const projects = [
     description: "Full-stack healthcare web application with separate backend and frontend, RESTful API design, and structured configuration management.",
     insight: "Demonstrates full ownership of both the backend logic and the frontend experience in a real-world application context.",
     tech: ["Node.js", "React", "JavaScript", "REST API", "MongoDB"],
-    visualLabel: "Healthcare workflow",
-    visualText: "Clean architecture, API-first design, and a product surface built for dependable use.",
+    highlights: ["Separate patient and provider flows", "Role-aware frontend and API design", "Structured backend and data handling"],
     link: "https://github.com/Vraj26shah/mediguard",
+    imageSrc: "/project-screenshot-06.png",
+    imageAlt: "MediGuard healthcare app architecture screenshot",
   },
   {
     index: "07",
     category: "Web Scheduling Tool",
     title: "Timetable Maker",
-    description: "Lightweight browser-based timetable creation tool with no backend dependencies — fast, responsive, and deployed on Vercel.",
+    description: "Lightweight browser-based timetable creation tool with no backend dependencies, designed to be fast, responsive, and easy to use.",
     insight: "A focused single-page tool that shows I can ship something clean and usable without overengineering the solution.",
     tech: ["JavaScript", "HTML", "CSS", "Responsive Design", "Vercel"],
-    visualLabel: "Scheduling made simple",
-    visualText: "Zero-dependency frontend tool with instant usability and a clean scheduling interface.",
+    highlights: ["Frontend-only workflow", "Fast scheduling interactions", "Simple tool built for direct usability"],
     link: "https://github.com/Vraj26shah/timetablemaker",
     liveUrl: "https://ffcstimetablemaker.vercel.app",
+    imageSrc: "/project-screenshot-timetable.svg",
+    imageAlt: "Timetable Maker project architecture diagram",
   },
 ];
 
@@ -177,33 +197,30 @@ const researchPapers = [
 const processSteps = [
   {
     id: "01",
-    title: "Open strong",
-    text: "The page leads with the work so the first impression already says something real.",
+    title: "Understand the problem",
+    text: "Before touching any code I map out what needs to be built, why it matters, and what the failure modes are. Clear scope stops me from building the wrong thing cleanly.",
   },
   {
     id: "02",
-    title: "Keep it readable",
-    text: "Spacing, copy, and section rhythm are tuned so the content stays easy to scan without feeling flat.",
+    title: "Design the architecture",
+    text: "I sketch the system design first — services, data flow, network boundaries, and where the complexity lives. Good architecture decisions are cheaper before the code than after.",
   },
   {
     id: "03",
-    title: "Let motion help",
-    text: "Animation guides attention, adds pace, and keeps the experience smooth without becoming the main event.",
+    title: "Build iteratively",
+    text: "I work layer by layer: get the core path running, verify it works, then add features. Each iteration is tested against real inputs, not assumptions.",
   },
   {
     id: "04",
-    title: "Polish the edges",
-    text: "The final layer is about responsiveness, consistency, and making the whole portfolio feel ready to ship.",
+    title: "Automate delivery",
+    text: "CI/CD pipelines, container builds, and environment config are set up early. Shipping should be a non-event, not a scramble. Monitoring and alerting go in before production traffic does.",
+  },
+  {
+    id: "05",
+    title: "Operate and improve",
+    text: "Post-ship I watch metrics, read logs, and act on signals. A build is not done when it deploys — it is done when I understand how it behaves under real load and edge cases.",
   },
 ];
-
-function renderChars(text: string) {
-  return Array.from(text).map((char, index) => (
-    <span key={`${char}-${index}`} className={`hero-char${char === " " ? " is-space" : ""}`}>
-      {char === " " ? "\u00A0" : char}
-    </span>
-  ));
-}
 
 function renderWords(text: string) {
   return text.split(" ").map((word, index) => (
@@ -223,19 +240,104 @@ export default function App() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const workSectionRef = useRef<HTMLElement>(null);
-  const workViewportRef = useRef<HTMLDivElement>(null);
-  const workRailRef = useRef<HTMLDivElement>(null);
-  const loaderRef = useRef<HTMLDivElement>(null);
-  const loaderValueRef = useRef<HTMLSpanElement>(null);
-  const loaderLineRef = useRef<HTMLDivElement>(null);
-  const cursorDotRef = useRef<HTMLDivElement>(null);
-  const cursorRingRef = useRef<HTMLDivElement>(null);
   const scrollBarRef = useRef<HTMLDivElement>(null);
-  const smootherRef = useRef<ScrollSmoother | null>(null);
-  const [isReady, setIsReady] = useState(false);
-  const [showLoader, setShowLoader] = useState(true);
+  const [isReady] = useState(true);
+  const [loaderProgress, setLoaderProgress] = useState(0);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    // Cinematic loader — progress 0→100 over ~1.8s using RAF, then fade out
+    const DURATION = 1800;
+    const start = performance.now();
+    let raf: number;
+
+    const tick = (now: number) => {
+      const p = Math.min(100, Math.round(((now - start) / DURATION) * 100));
+      setLoaderProgress(p);
+      if (p < 100) {
+        raf = requestAnimationFrame(tick);
+      } else {
+        setTimeout(() => setLoaded(true), 520); // wait for CSS fade-out
+      }
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
   const [activeSection, setActiveSection] = useState("");
+  const [activeProjectIndex, setActiveProjectIndex] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [lightbox, setLightbox] = useState<{ src: string; alt: string; title: string } | null>(null);
+  const [zoom, setZoom] = useState(1);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragRef = useRef<{ startX: number; startY: number; scrollLeft: number; scrollTop: number } | null>(null);
+  const lbBodyRef = useRef<HTMLDivElement>(null);
+
+  const openLightbox = (src: string, alt: string, title: string) => {
+    setZoom(1);
+    setLightbox({ src, alt, title });
+  };
+  const closeLightbox = () => { setLightbox(null); setZoom(1); };
+  const zoomIn  = () => setZoom(z => Math.min(z + 0.5, 4));
+  const zoomOut = () => setZoom(z => Math.max(z - 0.5, 0.5));
+  const zoomReset = () => setZoom(1);
+
+  // Double-click: zoom in progressively; at max reset
+  const handleLbDblClick = () => setZoom(z => z >= 3.5 ? 1 : Math.min(z + 0.75, 4));
+
+  // Drag-to-pan handlers
+  const handleLbMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (zoom <= 1) return;
+    const el = lbBodyRef.current;
+    if (!el) return;
+    setIsDragging(true);
+    dragRef.current = { startX: e.clientX, startY: e.clientY, scrollLeft: el.scrollLeft, scrollTop: el.scrollTop };
+    e.preventDefault();
+  };
+  const handleLbMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!isDragging || !dragRef.current) return;
+    const el = lbBodyRef.current;
+    if (!el) return;
+    el.scrollLeft = dragRef.current.scrollLeft - (e.clientX - dragRef.current.startX);
+    el.scrollTop  = dragRef.current.scrollTop  - (e.clientY - dragRef.current.startY);
+  };
+  const handleLbMouseUp = () => { setIsDragging(false); dragRef.current = null; };
+
+  // Close lightbox on Escape; zoom with + / -
+  useEffect(() => {
+    if (!lightbox) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape")   closeLightbox();
+      if (e.key === "+" || e.key === "=") zoomIn();
+      if (e.key === "-")        zoomOut();
+      if (e.key === "0")        zoomReset();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [lightbox]);
+  // Active nav link — track which section is currently past the top of the viewport.
+  // Uses a scroll listener + getBoundingClientRect so it works correctly with GSAP-pinned
+  // sections (showcase pin, work pin) where ScrollTrigger trigger positions are unreliable.
+  useEffect(() => {
+    const ids = ["home", "story", "craft", "work", "stack", "process", "resume", "contact"];
+    const THRESHOLD = 120; // px from viewport top (sits just below the fixed navbar)
+
+    const update = () => {
+      let current = "";
+      for (const id of ids) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        // getBoundingClientRect gives the visual top even for position:fixed pins
+        if (el.getBoundingClientRect().top <= THRESHOLD) {
+          current = id;
+        }
+      }
+      if (current) setActiveSection(current);
+    };
+
+    window.addEventListener("scroll", update, { passive: true });
+    update(); // set correct state on mount / refresh
+    return () => window.removeEventListener("scroll", update);
+  }, []);
 
   // Close mobile menu on resize to desktop
   useEffect(() => {
@@ -246,105 +348,23 @@ export default function App() {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
-  // Prevent body scroll when mobile menu is open
+  // Prevent body scroll when mobile menu or lightbox is open
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "";
+    document.body.style.overflow = (menuOpen || !!lightbox) ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
-  }, [menuOpen]);
+  }, [menuOpen, lightbox]);
 
-  // Smooth bidirectional scroll for all anchor links
+  // Smooth scroll for all anchor links
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const href = e.currentTarget.getAttribute("href");
     if (!href || !href.startsWith("#")) return;
     e.preventDefault();
     setMenuOpen(false);
-    const smoother = smootherRef.current ?? ScrollSmoother.get();
-    if (smoother) {
-      smoother.scrollTo(href, true, "top top");
-    } else {
-      document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
-    }
+    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // Custom cursor with magnetic pull on interactive elements
+  // Button hover spotlight effect
   useEffect(() => {
-    const finePointer = window.matchMedia("(pointer: fine)").matches;
-    const dot = cursorDotRef.current;
-    const ring = cursorRingRef.current;
-
-    if (!finePointer || !dot || !ring) {
-      return;
-    }
-
-    const moveDotX = gsap.quickTo(dot, "x", { duration: 0.1, ease: "power3.out" });
-    const moveDotY = gsap.quickTo(dot, "y", { duration: 0.1, ease: "power3.out" });
-    const moveRingX = gsap.quickTo(ring, "x", { duration: 0.28, ease: "power3.out" });
-    const moveRingY = gsap.quickTo(ring, "y", { duration: 0.28, ease: "power3.out" });
-
-    const fillSelector =
-      ".feature-card, .service-card, .project-card, .timeline-step, .hero-metrics article, .story-lead, .story-note, .contact-card, .hero-orbit-copy__card";
-
-    const updateTargetFillPosition = (target: HTMLElement, clientX: number, clientY: number) => {
-      const rect = target.getBoundingClientRect();
-      const x = ((clientX - rect.left) / rect.width) * 100;
-      const y = ((clientY - rect.top) / rect.height) * 100;
-      target.style.setProperty("--cursor-fill-x", `${x}%`);
-      target.style.setProperty("--cursor-fill-y", `${y}%`);
-    };
-
-    const handleMove = (event: MouseEvent) => {
-      moveDotX(event.clientX);
-      moveDotY(event.clientY);
-      moveRingX(event.clientX);
-      moveRingY(event.clientY);
-    };
-
-    const handleInteractiveMove = (event: Event) => {
-      const target = event.currentTarget;
-      if (!(target instanceof HTMLElement) || !(event instanceof MouseEvent) || !target.matches(fillSelector)) return;
-      updateTargetFillPosition(target, event.clientX, event.clientY);
-    };
-
-    const handleEnter = (event: Event) => {
-      const target = event.currentTarget;
-      if (!(target instanceof HTMLElement)) return;
-      ring.classList.add("is-active");
-      if (target.matches(fillSelector)) {
-        target.classList.add("is-cursor-filled");
-        if (event instanceof MouseEvent) {
-          updateTargetFillPosition(target, event.clientX, event.clientY);
-        }
-      }
-    };
-
-    const handleLeave = (event: Event) => {
-      const target = event.currentTarget;
-      if (target instanceof HTMLElement && target.matches(fillSelector)) {
-        target.classList.remove("is-cursor-filled");
-      }
-      ring.classList.remove("is-active");
-    };
-
-    // Observe interactive elements (including dynamically rendered ones)
-    const observe = () => {
-      const interactiveElements = Array.from(
-        document.querySelectorAll<HTMLElement>(
-          "a, button, .service-card, .project-card, .timeline-step, .feature-card, .hero-metrics article",
-        ),
-      );
-      interactiveElements.forEach((element) => {
-        element.addEventListener("mouseenter", handleEnter);
-        element.addEventListener("mouseleave", handleLeave);
-        element.addEventListener("mousemove", handleInteractiveMove);
-      });
-      return interactiveElements;
-    };
-
-    document.documentElement.classList.add("has-custom-cursor");
-    window.addEventListener("mousemove", handleMove);
-    const elements = observe();
-
-    // Button hover spotlight effect
     const buttons = document.querySelectorAll<HTMLElement>(".button");
     const handleButtonMove = (e: MouseEvent) => {
       const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
@@ -354,15 +374,7 @@ export default function App() {
       (e.currentTarget as HTMLElement).style.setProperty("--my", `${y}%`);
     };
     buttons.forEach((btn) => btn.addEventListener("mousemove", handleButtonMove as EventListener));
-
     return () => {
-      document.documentElement.classList.remove("has-custom-cursor");
-      window.removeEventListener("mousemove", handleMove);
-      elements.forEach((element) => {
-        element.removeEventListener("mouseenter", handleEnter);
-        element.removeEventListener("mouseleave", handleLeave);
-        element.removeEventListener("mousemove", handleInteractiveMove);
-      });
       buttons.forEach((btn) => btn.removeEventListener("mousemove", handleButtonMove as EventListener));
     };
   }, [isReady]);
@@ -374,81 +386,12 @@ export default function App() {
     document.body.scrollTop = 0;
   }, []);
 
-  useEffect(() => {
-    const loader = loaderRef.current;
-    const loaderValue = loaderValueRef.current;
-    const loaderLine = loaderLineRef.current;
-
-    if (!loader || !loaderValue || !loaderLine) {
-      setIsReady(true);
-      setShowLoader(false);
-      return;
-    }
-
-    const progress = { value: 0 };
-    const timeline = gsap.timeline();
-
-    timeline
-      .to(progress, {
-        value: 100,
-        duration: 2.1,
-        ease: "power2.out",
-        onUpdate: () => {
-          const rounded = Math.round(progress.value);
-          loaderValue.textContent = `${rounded.toString().padStart(2, "0")}`;
-          loaderLine.style.transform = `scaleX(${progress.value / 100})`;
-        },
-      })
-      .to(loader, {
-        clipPath: "inset(0 0 100% 0)",
-        duration: 0.9,
-        ease: "power4.inOut",
-        onStart: () => setIsReady(true),
-        onComplete: () => setShowLoader(false),
-      });
-
-    return () => {
-      timeline.kill();
-    };
-  }, []);
-
-  useGSAP(
-    () => {
-      if (!wrapperRef.current || !contentRef.current) {
-        return;
-      }
-
-      const existing = ScrollSmoother.get();
-      const smoother =
-        existing ??
-        ScrollSmoother.create({
-          wrapper: wrapperRef.current,
-          content: contentRef.current,
-          smooth: 1.2,
-          speed: 1,
-          effects: true,
-          normalizeScroll: true,
-        });
-
-      smootherRef.current = smoother;
-
-      return () => {
-        if (!existing) {
-          smoother.kill();
-          smootherRef.current = null;
-        }
-      };
-    },
-    { scope: appRef },
-  );
 
   useGSAP(
     () => {
       if (!isReady || !contentRef.current) {
         return;
       }
-
-      scrollState.progress = 0;
 
       const isMobile = window.innerWidth <= 768;
 
@@ -457,67 +400,17 @@ export default function App() {
         gsap.set(".feature-card.is-first", { autoAlpha: 1, yPercent: 0, scale: 1 });
       }
 
-      const introTimeline = gsap.timeline({ defaults: { ease: "power3.out" } });
-      introTimeline
-        .fromTo(".topbar", { autoAlpha: 0, y: -32 }, { autoAlpha: 1, y: 0, duration: 0.8 }, 0.12)
-        .fromTo(".hero-char", { autoAlpha: 0, yPercent: 120, rotateX: -90 }, { autoAlpha: 1, yPercent: 0, rotateX: 0, duration: 1.1, stagger: 0.028 }, 0.22)
-        .fromTo(".hero-kicker, .hero-subtitle, .hero-actions, .hero-metrics, .hero-scroll", { autoAlpha: 0, y: 36 }, { autoAlpha: 1, y: 0, duration: 0.8, stagger: 0.08 }, 0.72);
+      gsap.fromTo(".topbar", { autoAlpha: 0, y: -32 }, { autoAlpha: 1, y: 0, duration: 0.8, ease: "power3.out", delay: 0.12 });
 
-      // Master scroll progress — drives 3D scene + progress bar
+      // Scroll progress bar
       ScrollTrigger.create({
         trigger: contentRef.current,
         start: "top top",
         end: "bottom bottom",
         onUpdate: (self) => {
-          scrollState.progress = self.progress;
           if (scrollBarRef.current) {
             scrollBarRef.current.style.width = `${(self.progress * 100).toFixed(1)}%`;
           }
-        },
-      });
-
-      ScrollTrigger.create({
-        trigger: ".hero-section",
-        start: "bottom top+=100",
-        end: "bottom top",
-        toggleClass: { targets: ".topbar", className: "is-scrolled" },
-      });
-
-      // Active nav link tracking
-      const sectionIds = ["home", "story", "craft", "work", "stack", "process", "resume", "contact"];
-      sectionIds.forEach((id) => {
-        const el = document.getElementById(id);
-        if (!el) return;
-        ScrollTrigger.create({
-          trigger: el,
-          start: "top center",
-          end: "bottom center",
-          onEnter: () => setActiveSection(id),
-          onEnterBack: () => setActiveSection(id),
-        });
-      });
-
-      gsap.to(".hero-copy", {
-        yPercent: -18,
-        autoAlpha: 0.1,
-        ease: "none",
-        scrollTrigger: {
-          trigger: ".hero-section",
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
-
-      gsap.to(".hero-orbit-copy", {
-        yPercent: -25,
-        autoAlpha: 0.2,
-        ease: "none",
-        scrollTrigger: {
-          trigger: ".hero-section",
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
         },
       });
 
@@ -615,32 +508,43 @@ export default function App() {
         );
       });
 
-      // Horizontal scroll — pin the work section and slide rail left
-      if (workSectionRef.current && workRailRef.current && workViewportRef.current && window.innerWidth > 900) {
-        const rail = workRailRef.current;
-        const section = workSectionRef.current;
-        const viewport = workViewportRef.current;
-
-        gsap.set(rail, { x: 0 });
-
-        gsap.to(rail, {
-          x: () => {
-            const travel = Math.max(rail.scrollWidth - viewport.offsetWidth, 0);
-            return -travel;
+      // Stacked slides — pin the work section and drive both panels via activeProjectIndex
+      if (workSectionRef.current && window.innerWidth > 900) {
+        ScrollTrigger.create({
+          trigger: workSectionRef.current,
+          start: "top top",
+          end: `+=${window.innerHeight * (projects.length - 1)}`,
+          pin: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          onEnter: () => {
+            setActiveProjectIndex(0);
           },
-          ease: "none",
-          scrollTrigger: {
-            trigger: section,
-            start: "top top",
-            end: () => {
-              const travel = Math.max(rail.scrollWidth - viewport.offsetWidth, 0);
-              return `+=${Math.max(travel, window.innerHeight * 2)}`;
+          onEnterBack: () => {
+            setActiveProjectIndex(projects.length - 1);
+          },
+          onUpdate: (self) => {
+            const index = Math.min(
+              projects.length - 1,
+              Math.max(0, Math.round(self.progress * (projects.length - 1))),
+            );
+            setActiveProjectIndex(index);
+          },
+        });
+      } else if (workSectionRef.current) {
+        const cards = gsap.utils.toArray<HTMLElement>(".project-card-slide");
+        cards.forEach((card, index) => {
+          ScrollTrigger.create({
+            trigger: card,
+            start: "top center",
+            end: "bottom center",
+            onEnter: () => {
+              setActiveProjectIndex(index);
             },
-            scrub: 1,
-            pin: true,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-          },
+            onEnterBack: () => {
+              setActiveProjectIndex(index);
+            },
+          });
         });
       }
 
@@ -704,38 +608,90 @@ export default function App() {
   );
 
   return (
-    <div ref={appRef} className={`app-shell${isReady ? " is-ready" : ""}`}>
-      {showLoader ? (
-        <div ref={loaderRef} className="loading-screen" aria-hidden={isReady}>
+    <div ref={appRef} className="app-shell is-ready">
+      {/* Cinematic loading screen */}
+      {!loaded && (
+        <div className={`loading-screen${loaderProgress >= 100 ? " is-done" : ""}`} aria-hidden="true">
           <div className="loading-screen__grid" />
           <div className="loading-screen__inner">
             <p className="loading-screen__label">Preparing cinematic mode</p>
-            <span ref={loaderValueRef} className="loading-screen__value">
-              00
+            <span className="loading-screen__value">
+              {String(loaderProgress).padStart(2, "0")}
             </span>
             <div className="loading-screen__line-shell">
-              <div ref={loaderLineRef} className="loading-screen__line" />
+              <div
+                className="loading-screen__line"
+                style={{ transform: `scaleX(${loaderProgress / 100})` }}
+              />
             </div>
           </div>
         </div>
-      ) : null}
+      )}
+
+      {/* Architecture lightbox */}
+      {lightbox && (
+        <div
+          className="arch-lightbox"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${lightbox.title} system architecture`}
+          onClick={closeLightbox}
+        >
+          <div className="arch-lightbox__panel" onClick={(e) => e.stopPropagation()}>
+            <div className="arch-lightbox__header">
+              <span className="arch-lightbox__title">
+                <FiMaximize2 /> System Architecture — {lightbox.title}
+              </span>
+              <div className="arch-lightbox__controls">
+                <button className="arch-lightbox__zoom-btn" onClick={zoomOut} aria-label="Zoom out" title="Zoom out (-)">−</button>
+                <button className="arch-lightbox__zoom-label" onClick={zoomReset} aria-label="Reset zoom" title="Reset zoom (0)">
+                  {Math.round(zoom * 100)}%
+                </button>
+                <button className="arch-lightbox__zoom-btn" onClick={zoomIn} aria-label="Zoom in" title="Zoom in (+)">+</button>
+                <button
+                  className="arch-lightbox__close"
+                  onClick={closeLightbox}
+                  aria-label="Close architecture view"
+                >
+                  <FiX />
+                  <span>Close</span>
+                </button>
+              </div>
+            </div>
+            <div
+              ref={lbBodyRef}
+              className="arch-lightbox__body"
+              data-zoomed={zoom > 1 ? "true" : "false"}
+              onDoubleClick={handleLbDblClick}
+              onMouseDown={handleLbMouseDown}
+              onMouseMove={handleLbMouseMove}
+              onMouseUp={handleLbMouseUp}
+              onMouseLeave={handleLbMouseUp}
+              style={{ cursor: zoom <= 1 ? "zoom-in" : isDragging ? "grabbing" : "grab" }}
+            >
+              <img
+                src={lightbox.src}
+                alt={lightbox.alt}
+                draggable={false}
+                style={{
+                  width: zoom > 1 ? `${zoom * 100}%` : "auto",
+                  maxWidth: zoom > 1 ? "none" : "100%",
+                  height: "auto",
+                  maxHeight: zoom > 1 ? "none" : "calc(92vh - 6rem)",
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="scroll-progress" aria-hidden="true">
         <div ref={scrollBarRef} className="scroll-progress__bar" />
       </div>
 
-      <div ref={cursorDotRef} className="cursor-dot" />
-      <div ref={cursorRingRef} className="cursor-ring" />
-
-      <div className="scene-layer" aria-hidden="true">
-        <HeroScene />
-      </div>
-
-      <div className="scene-vignette" aria-hidden="true" />
-
-      <div id="smooth-wrapper" ref={wrapperRef}>
-        <div id="smooth-content" ref={contentRef}>
-          <header className="topbar">
+      <div ref={wrapperRef}>
+        <div ref={contentRef}>
+          <header className="topbar is-scrolled">
             <a className="brand-mark" href="#home" onClick={handleNavClick}>
               <span className="brand-mark__dot" />
               Vraj Shah
@@ -824,17 +780,18 @@ export default function App() {
           </aside>
 
           <main>
+            {/* ── Hero Introduction ─────────────────────────────────────────── */}
             <section id="home" className="hero-section">
               <div className="hero-copy">
-                <p className="hero-kicker">Engineering student • Cloud • DevOps • Networking • Full stack</p>
+                <p className="hero-kicker">Engineering student · Cloud · DevOps · Networking · Full stack</p>
 
                 <h1 className="hero-title" aria-label="Vraj Shah">
-                  <span className="hero-title__line">{renderChars("VRAJ")}</span>
-                  <span className="hero-title__line">{renderChars("SHAH")}</span>
+                  <span className="hero-title__line">VRAJ</span>
+                  <span className="hero-title__line">SHAH</span>
                 </h1>
 
                 <p className="hero-subtitle">
-                  I build across cloud, DevOps, networking, and frontend, with a strong pull toward systems that feel solid and interfaces that feel sharp.
+                  I build across cloud, DevOps, networking, and frontend — with a strong pull toward systems that feel solid and interfaces that feel sharp.
                 </p>
 
                 <div className="hero-actions">
@@ -847,39 +804,35 @@ export default function App() {
                 </div>
 
                 <div className="hero-metrics">
-                  <article>
+                  <article className="glass-card">
                     <strong>Project-led</strong>
-                    <span>The strongest builds show up early, with enough detail to explain what matters.</span>
+                    <span>Strong builds show up early, with enough detail to explain what matters.</span>
                   </article>
-                  <article>
+                  <article className="glass-card">
                     <strong>Systems-minded</strong>
-                    <span>Linux, automation, networking, research, and frontend work all live in the same build story.</span>
+                    <span>Linux, automation, networking, research, and frontend work in one build story.</span>
                   </article>
-                  <article>
+                  <article className="glass-card">
                     <strong>Built with intent</strong>
-                    <span>The layout stays clean, the motion stays useful, and the copy stays direct.</span>
+                    <span>Clean layout, useful motion, and direct copy — no filler.</span>
                   </article>
                 </div>
               </div>
 
               <div className="hero-orbit-copy">
-                <div className="hero-orbit-copy__card hero-orbit-copy__card--primary glass-card">
-                  <span>Current energy</span>
-                  <strong>I am at my best when I can connect solid engineering fundamentals with interfaces that feel modern, fast, and deliberate.</strong>
+                <div className="hero-orbit-copy__card glass-card">
+                  <span>Current focus</span>
+                  <strong>Cloud workflows, observability, networking, and frontend systems are the areas pulling me forward right now.</strong>
                   <div className="hero-orbit-copy__list">
                     <div>
-                      <small>Right now</small>
-                      <p>Cloud workflows, observability, networking, and frontend systems are the areas pulling me forward.</p>
+                      <small>Build style</small>
+                      <p>Clean architecture, visible system thinking, and product surfaces that feel considered.</p>
                     </div>
                     <div>
-                      <small>Build style</small>
-                      <p>I like clean architecture, visible system thinking, and product surfaces that feel considered.</p>
+                      <small>Right now</small>
+                      <p>B.Tech Computer Science · VIT Bhopal · CGPA 8.75 · Open to internships and collaborations.</p>
                     </div>
                   </div>
-                </div>
-                <div className="hero-orbit-copy__card hero-orbit-copy__card--secondary glass-card">
-                  <span>What you will find here</span>
-                  <strong>Projects with real engineering weight, a clear stack, and a portfolio that moves with confidence.</strong>
                 </div>
                 <div className="hero-scroll">
                   <span>Scroll to explore</span>
@@ -887,6 +840,7 @@ export default function App() {
               </div>
             </section>
 
+            {/* ── Showcase ──────────────────────────────────────────────────── */}
             <section className="showcase-shell">
               <div className="showcase-frame">
                 <div className="showcase-copy reveal-up">
@@ -967,53 +921,126 @@ export default function App() {
               <div className="work-stage">
                 <div className="work-intro reveal-up">
                   <p className="eyebrow">Selected work</p>
-                  <h2>Projects that ship, not just screenshots.</h2>
+                  <h2>Architecture on the left. Engineering detail on the right.</h2>
                   <p className="work-intro__text">
-                    Each card links directly to GitHub. Live demos shown where available.
+                    Scroll to step through each project. The system architecture diagram and the project breakdown stay in sync as you move.
                   </p>
                 </div>
 
-                <div ref={workViewportRef} className="work-viewport">
-                  <div ref={workRailRef} className="work-rail">
-                    {projects.map((project) => (
-                      <article key={project.index} className="project-card glass-card">
-                        <div className="project-card__visual">
-                          <span className="project-card__category">{project.category}</span>
-                          <span className="project-card__num">{project.index}</span>
-                        </div>
-                        <div className="project-card__body">
-                          <h3>{project.title}</h3>
-                          <p className="project-card__desc">{project.description}</p>
-                          <ul className="project-tags" aria-label={`${project.title} technologies`}>
-                            {project.tech.map((item) => (
-                              <li key={item}>{item}</li>
-                            ))}
-                          </ul>
-                          <div className="project-card__links">
-                            <a
-                              href={project.link}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="project-card__link"
-                              aria-label={`View ${project.title} on GitHub`}
+                <div className="work-progress-dots" aria-hidden="true">
+                  {projects.map((_, i) => (
+                    <span key={i} className={`work-progress-dot${activeProjectIndex === i ? " is-active" : ""}`} />
+                  ))}
+                </div>
+
+                <div className="work-split">
+                  {/* LEFT — Architecture diagrams */}
+                  <div className="work-pane work-pane--arch">
+                    <div className="work-viewport work-viewport--arch">
+                      <div className="work-arch-stack">
+                        {projects.map((project, index) => (
+                          <article
+                            key={project.index}
+                            className={`arch-slide${
+                              activeProjectIndex === index
+                                ? " is-active"
+                                : activeProjectIndex > index
+                                ? " is-past"
+                                : " is-upcoming"
+                            }`}
+                          >
+                            <div className="arch-slide__chrome">
+                              <span>{project.category}</span>
+                              <span>{project.index}</span>
+                            </div>
+                            <button
+                              className="arch-slide__frame"
+                              onClick={() => openLightbox(project.imageSrc, project.imageAlt, project.title)}
+                              aria-label={`View ${project.title} architecture fullscreen`}
+                              title="Click to view full architecture"
                             >
-                              <FiGithub /> GitHub
-                            </a>
-                            {project.liveUrl && (
-                              <a
-                                href={project.liveUrl}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="project-card__link project-card__link--live"
-                                aria-label={`View ${project.title} live`}
-                              >
-                                <FiArrowUpRight /> Live
-                              </a>
-                            )}
-                          </div>
-                        </div>
-                      </article>
-                    ))}
+                              <img src={project.imageSrc} alt={project.imageAlt} loading="lazy" />
+                              <span className="arch-slide__expand-hint">
+                                <FiMaximize2 /> View architecture
+                              </span>
+                            </button>
+                            <p className="arch-slide__caption">{project.title}</p>
+                          </article>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* RIGHT — Project cards */}
+                  <div className="work-pane work-pane--cards">
+                    <div className="work-viewport work-viewport--cards">
+                      <div className="work-cards-stack">
+                        {projects.map((project, index) => (
+                          <article
+                            key={project.index}
+                            className={`project-card-slide project-frame project-card${
+                              activeProjectIndex === index
+                                ? " is-active"
+                                : activeProjectIndex > index
+                                ? " is-past"
+                                : " is-upcoming"
+                            }`}
+                          >
+                            <div className="project-card__body">
+                              <div className="project-card__header">
+                                <div>
+                                  <span className="project-card__category">{project.category}</span>
+                                  <h3>{project.title}</h3>
+                                </div>
+                                <span className="project-card__num">{project.index}</span>
+                              </div>
+
+                              <p className="project-card__desc">{project.description}</p>
+
+                              <div className="project-card__detail">
+                                <strong>Project focus</strong>
+                                <p>{project.insight}</p>
+                              </div>
+
+                              <ul className="project-highlights" aria-label={`${project.title} highlights`}>
+                                {project.highlights.map((item) => (
+                                  <li key={item}>{item}</li>
+                                ))}
+                              </ul>
+
+                              <ul className="project-tags" aria-label={`${project.title} technologies`}>
+                                {project.tech.map((item) => (
+                                  <li key={item}>{item}</li>
+                                ))}
+                              </ul>
+
+                              <div className="project-card__links">
+                                <a
+                                  href={project.link}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="project-card__link"
+                                  aria-label={`View ${project.title} on GitHub`}
+                                >
+                                  <FiGithub /> GitHub
+                                </a>
+                                {project.liveUrl && (
+                                  <a
+                                    href={project.liveUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="project-card__link project-card__link--live"
+                                    aria-label={`View ${project.title} live`}
+                                  >
+                                    <FiArrowUpRight /> Live
+                                  </a>
+                                )}
+                              </div>
+                            </div>
+                          </article>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1027,8 +1054,8 @@ export default function App() {
 
             <section id="process" className="process-section section-shell">
               <div className="section-heading reveal-up">
-                <p className="eyebrow">Process</p>
-                <h2>I care about flow, hierarchy, and the small decisions that make a build feel finished.</h2>
+                <p className="eyebrow">How I work</p>
+                <h2>From first principles to production — how I approach every engineering build.</h2>
               </div>
 
               <div className="process-grid">

@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="420" viewBox="0 0 600 420">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#4b5563"/>
+    </marker>
+  </defs>
+
+  <!-- background -->
+  <rect width="600" height="420" fill="#0f172a"/>
+
+  <!-- Row 1: Student Input (left) + Mentor Pool (right) -->
+  <rect x="40" y="28" width="170" height="64" rx="10" fill="#1e3a5f"/>
+  <text x="125" y="54" text-anchor="middle" fill="#ffffff" font-family="Arial,sans-serif" font-size="13" font-weight="700">Student Input</text>
+  <text x="125" y="72" text-anchor="middle" fill="#94a3b8" font-family="Arial,sans-serif" font-size="11">Survey, goals, skills</text>
+
+  <rect x="390" y="28" width="170" height="64" rx="10" fill="#1e3a5f"/>
+  <text x="475" y="54" text-anchor="middle" fill="#ffffff" font-family="Arial,sans-serif" font-size="13" font-weight="700">Mentor Pool</text>
+  <text x="475" y="72" text-anchor="middle" fill="#94a3b8" font-family="Arial,sans-serif" font-size="11">Profile database</text>
+
+  <!-- arrows to Data Profiler -->
+  <line x1="210" y1="60" x2="268" y2="100" stroke="#4b5563" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="390" y1="60" x2="332" y2="100" stroke="#4b5563" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- Row 2: Data Profiler (center) -->
+  <rect x="215" y="108" width="170" height="64" rx="10" fill="#7c2d12"/>
+  <text x="300" y="134" text-anchor="middle" fill="#ffffff" font-family="Arial,sans-serif" font-size="13" font-weight="700">Data Profiler</text>
+  <text x="300" y="152" text-anchor="middle" fill="#fca5a5" font-family="Arial,sans-serif" font-size="11">Feature scoring</text>
+
+  <!-- arrow down to Feature Extractor -->
+  <line x1="300" y1="172" x2="300" y2="198" stroke="#4b5563" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- Row 3: Feature Extractor (center) -->
+  <rect x="215" y="206" width="170" height="64" rx="10" fill="#14532d"/>
+  <text x="300" y="232" text-anchor="middle" fill="#ffffff" font-family="Arial,sans-serif" font-size="13" font-weight="700">Feature Extractor</text>
+  <text x="300" y="250" text-anchor="middle" fill="#86efac" font-family="Arial,sans-serif" font-size="11">Vector embeddings</text>
+
+  <!-- arrows out to Decision Tree and Genetic Optimizer -->
+  <line x1="215" y1="238" x2="170" y2="300" stroke="#4b5563" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="385" y1="238" x2="430" y2="300" stroke="#4b5563" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- Row 4: Decision Tree (left) + Genetic Optimizer (right) -->
+  <rect x="40" y="306" width="170" height="64" rx="10" fill="#4c1d95"/>
+  <text x="125" y="332" text-anchor="middle" fill="#ffffff" font-family="Arial,sans-serif" font-size="13" font-weight="700">Decision Tree</text>
+  <text x="125" y="350" text-anchor="middle" fill="#c4b5fd" font-family="Arial,sans-serif" font-size="11">Classification paths</text>
+
+  <rect x="390" y="306" width="170" height="64" rx="10" fill="#92400e"/>
+  <text x="475" y="332" text-anchor="middle" fill="#ffffff" font-family="Arial,sans-serif" font-size="13" font-weight="700">Genetic Algorithm</text>
+  <text x="475" y="350" text-anchor="middle" fill="#fde68a" font-family="Arial,sans-serif" font-size="11">Optimisation loop</text>
+
+  <!-- arrows to Recommendation -->
+  <line x1="210" y1="338" x2="258" y2="376" stroke="#4b5563" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="390" y1="338" x2="342" y2="376" stroke="#4b5563" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- Row 5: Recommendation Output -->
+  <rect x="215" y="384" width="170" height="28" rx="7" fill="#065f46"/>
+  <text x="300" y="401" text-anchor="middle" fill="#ffffff" font-family="Arial,sans-serif" font-size="12" font-weight="700">Recommendation Output</text>
+</svg>
