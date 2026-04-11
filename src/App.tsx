@@ -45,21 +45,21 @@ const socialLinks = [
 const featurePanels = [
   {
     id: "01",
-    eyebrow: "Sharp Start",
-    title: "Projects first, signal early, and no wasted scroll.",
-    text: "The structure is built to move fast: strong work up front, clean pacing, and just enough context to keep the story clear.",
+    eyebrow: "Production at 20",
+    title: "ScholarStack: ₹10,000+/month, 500+ concurrent users, zero external IT.",
+    text: "Built, deployed, and operated a live Linux platform end-to-end — DNS, SSL, Nginx, Python automation, and cron pipelines — with 99%+ uptime and no third-party IT support.",
   },
   {
     id: "02",
-    eyebrow: "Clean Motion",
-    title: "The visuals carry energy without getting in the way.",
-    text: "Movement stays controlled so the page feels alive, but the work still stays readable from top to bottom.",
+    eyebrow: "Full-Stack Systems",
+    title: "Linux to AWS to frontend — one engineer owning the full build.",
+    text: "Ubuntu server administration, Docker CI/CD, Prometheus + Grafana monitoring on EC2, TCP/IP packet analysis, and React frontends — all genuine production work, not toy projects.",
   },
   {
     id: "03",
-    eyebrow: "Build Style",
-    title: "Cloud, systems, and frontend work sit together as one modern engineering profile.",
-    text: "The portfolio shows how I like to build: structured, practical, and polished where the details matter.",
+    eyebrow: "Research-Backed",
+    title: "Two peer-reviewed papers and 40+ published technical articles.",
+    text: "Co-authored research on ALU power optimisation and an intelligent mentorship matching algorithm — both peer-reviewed. Active Linux and networking blogger on Medium with 40+ long-form articles.",
   },
 ];
 
@@ -67,17 +67,17 @@ const services = [
   {
     icon: FiCloud,
     title: "Cloud & DevOps",
-    text: "I enjoy the side of engineering where systems ship cleanly, environments stay reliable, and infra decisions actually matter.",
+    text: "Docker, GitHub Actions CI/CD, Prometheus + Grafana observability, AWS EC2 provisioning via cloud-init, Bash automation, S3 backups, and SSH-hardened infrastructure — I own the full delivery pipeline.",
   },
   {
     icon: FiCpu,
-    title: "Networking & Systems",
-    text: "Protocols, traffic flow, debugging, and system-level thinking keep me locked in because they explain what is really happening under the hood.",
+    title: "Linux, Networking & Security",
+    text: "Daily Ubuntu/Fedora driver, RHCSA-aligned systems knowledge, Scapy-based packet analysis, TCP/IP and ARP anomaly detection, Nmap reconnaissance, and active TryHackMe CTF work.",
   },
   {
     icon: FiCode,
-    title: "Frontend & Interaction",
-    text: "I care about interfaces that feel fast, modern, and intentional, with motion used to support clarity instead of noise.",
+    title: "Full-Stack Development",
+    text: "React + TypeScript frontends, Node.js and FastAPI backends, RESTful API design, and end-to-end integration — with Python and Bash scripting tying the automation layer together.",
   },
 ];
 
@@ -185,11 +185,11 @@ const projects: {
 
 const researchPapers = [
   {
-    title: "Research Paper 1",
+    title: "Mentorship Algorithm Design using Decision Trees & Genetic Programming",
     href: "https://drive.google.com/file/d/1wRSaRFBvGezorwXrbTEyd87blxlKQMA4/view?usp=drive_link",
   },
   {
-    title: "Research Paper 2",
+    title: "Energy-Efficient ALU Design via Advanced Verilog Optimisation",
     href: "https://drive.google.com/file/d/1LgGJUPxdITf8N8qW0eK6qvadd869_wM9/view?usp=drive_link",
   },
 ];
@@ -409,7 +409,8 @@ export default function App() {
         end: "bottom bottom",
         onUpdate: (self) => {
           if (scrollBarRef.current) {
-            scrollBarRef.current.style.width = `${(self.progress * 100).toFixed(1)}%`;
+            // scaleX is compositor-thread only — no layout recalc on every scroll frame
+            scrollBarRef.current.style.transform = `scaleX(${self.progress.toFixed(4)})`;
           }
         },
       });
@@ -783,7 +784,7 @@ export default function App() {
             {/* ── Hero Introduction ─────────────────────────────────────────── */}
             <section id="home" className="hero-section">
               <div className="hero-copy">
-                <p className="hero-kicker">Engineering student · Cloud · DevOps · Networking · Full stack</p>
+                <p className="hero-kicker">VIT Bhopal · Linux · DevOps · AWS · Networking · Cybersecurity</p>
 
                 <h1 className="hero-title" aria-label="Vraj Shah">
                   <span className="hero-title__line">VRAJ</span>
@@ -791,7 +792,7 @@ export default function App() {
                 </h1>
 
                 <p className="hero-subtitle">
-                  I build across cloud, DevOps, networking, and frontend — with a strong pull toward systems that feel solid and interfaces that feel sharp.
+                  CS undergrad at VIT Bhopal — building production systems in Linux, DevOps, AWS, and Python since semester one. Founder of ScholarStack, active researcher, and open to internships.
                 </p>
 
                 <div className="hero-actions">
@@ -805,16 +806,16 @@ export default function App() {
 
                 <div className="hero-metrics">
                   <article className="glass-card">
-                    <strong>Project-led</strong>
-                    <span>Strong builds show up early, with enough detail to explain what matters.</span>
+                    <strong>500+ Users</strong>
+                    <span>ScholarStack serves 500+ concurrent users at 99%+ uptime — self-managed, no external IT.</span>
                   </article>
                   <article className="glass-card">
-                    <strong>Systems-minded</strong>
-                    <span>Linux, automation, networking, research, and frontend work in one build story.</span>
+                    <strong>2 Research Papers</strong>
+                    <span>Peer-reviewed work on genetic algorithm mentor matching and Verilog ALU power optimisation.</span>
                   </article>
                   <article className="glass-card">
-                    <strong>Built with intent</strong>
-                    <span>Clean layout, useful motion, and direct copy — no filler.</span>
+                    <strong>40+ Articles</strong>
+                    <span>Long-form Linux and networking publications on Medium, driving 25% traffic growth.</span>
                   </article>
                 </div>
               </div>
@@ -822,11 +823,11 @@ export default function App() {
               <div className="hero-orbit-copy">
                 <div className="hero-orbit-copy__card glass-card">
                   <span>Current focus</span>
-                  <strong>Cloud workflows, observability, networking, and frontend systems are the areas pulling me forward right now.</strong>
+                  <strong>DevOps pipelines, AWS cloud, network security, and Kubernetes — expanding into each with hands-on projects.</strong>
                   <div className="hero-orbit-copy__list">
                     <div>
                       <small>Build style</small>
-                      <p>Clean architecture, visible system thinking, and product surfaces that feel considered.</p>
+                      <p>Operate first, then automate. Real infra, real monitoring, real users — not toy setups.</p>
                     </div>
                     <div>
                       <small>Right now</small>
@@ -844,8 +845,8 @@ export default function App() {
             <section className="showcase-shell">
               <div className="showcase-frame">
                 <div className="showcase-copy reveal-up">
-                  <p className="eyebrow">Portfolio highlight</p>
-                  <h2>A portfolio with pace, clarity, and enough edge to stay memorable.</h2>
+                  <p className="eyebrow">What I bring</p>
+                  <h2>Systems thinker. Platform builder. Research contributor. Actively growing into DevOps, cloud, and cybersecurity.</h2>
                 </div>
 
                 <div className="feature-stack">
@@ -866,26 +867,26 @@ export default function App() {
             <section id="story" className="story-section section-shell">
               <div className="section-heading reveal-up">
                 <p className="eyebrow">Story</p>
-                <h2>I like building things that are technically grounded and still feel good to use.</h2>
+                <h2>CS undergrad at VIT Bhopal — building real systems since day one, not just coursework.</h2>
               </div>
 
               <div className="story-grid">
                 <div className="story-lead glass-card reveal-up">
                   <p className="reveal-word-group">
                     {renderWords(
-                      "This portfolio is a compact read on how I work: strong systems thinking, modern presentation, and a genuine interest in building things that hold up under real use.",
+                      "I started ScholarStack during my first semester and have been running it in production ever since — 500+ users, real revenue, and a Linux server I manage entirely on my own. That hands-on operational experience is what drives everything else I build.",
                     )}
                   </p>
                 </div>
 
                 <div className="story-notes">
                   <article className="story-note glass-card reveal-up">
-                    <strong>Clear structure</strong>
-                    <p>The sections move from identity to work, stack, process, resume, and contact without dragging the experience down.</p>
+                    <strong>Solvit Hackathon Finalist</strong>
+                    <p>Designed and shipped a fully responsive municipal-services interface in 12 hours — led the team to finalist status with a 35% boost in live-demo engagement.</p>
                   </article>
                   <article className="story-note glass-card reveal-up">
-                    <strong>Modern, not overdone</strong>
-                    <p>The visuals bring energy, but the portfolio stays anchored in projects, tools, and actual engineering choices.</p>
+                    <strong>CGPA 8.75 · Open to opportunities</strong>
+                    <p>B.Tech Computer Science at VIT Bhopal. Currently exploring Kubernetes, TryHackMe CTFs, blockchain consensus, and SLO/SLI engineering. Open to internships and collaborations.</p>
                   </article>
                 </div>
               </div>
@@ -896,7 +897,7 @@ export default function App() {
             <section id="craft" className="services-section section-shell">
               <div className="section-heading reveal-up">
                 <p className="eyebrow">Craft</p>
-                <h2>The mix is simple: systems depth, frontend polish, and a bias toward building things properly.</h2>
+                <h2>Infrastructure, security, and full-stack — three disciplines, one engineer, all production-tested.</h2>
               </div>
 
               <div className="services-grid">
@@ -921,9 +922,9 @@ export default function App() {
               <div className="work-stage">
                 <div className="work-intro reveal-up">
                   <p className="eyebrow">Selected work</p>
-                  <h2>Architecture on the left. Engineering detail on the right.</h2>
+                  <h2>Seven projects across DevOps, networking, ML research, and full-stack.</h2>
                   <p className="work-intro__text">
-                    Scroll to step through each project. The system architecture diagram and the project breakdown stay in sync as you move.
+                    Scroll to step through each project. System architecture on the left, engineering breakdown on the right — click any diagram to open full-screen.
                   </p>
                 </div>
 
@@ -1055,7 +1056,7 @@ export default function App() {
             <section id="process" className="process-section section-shell">
               <div className="section-heading reveal-up">
                 <p className="eyebrow">How I work</p>
-                <h2>From first principles to production — how I approach every engineering build.</h2>
+                <h2>From first principles to production — the same approach I used to build and ship ScholarStack solo.</h2>
               </div>
 
               <div className="process-grid">
@@ -1080,7 +1081,7 @@ export default function App() {
             <section id="resume" className="resume-section section-shell">
               <div className="section-heading reveal-up">
                 <p className="eyebrow">Resume & Research</p>
-                <h2>Experience, projects, and published research in one place.</h2>
+                <h2>One year of production experience, two peer-reviewed papers, and seven shipped projects.</h2>
               </div>
 
               <div className="resume-layout">
@@ -1147,9 +1148,9 @@ export default function App() {
             <section id="contact" className="contact-section">
               <div className="contact-card glass-card reveal-up">
                 <p className="eyebrow">Contact</p>
-                <h2>Open to good work, sharp teams, and interesting problems.</h2>
+                <h2>Open to internships, research collaborations, and engineering teams doing real work.</h2>
                 <p>
-                  If you want to talk about projects, internships, collaboration, or engineering ideas, feel free to reach out.
+                  Cloud infrastructure, DevOps, cybersecurity, or full-stack — if the problem is interesting, I want to hear about it. Reach out directly.
                 </p>
 
                 <div className="contact-actions">
@@ -1167,9 +1168,9 @@ export default function App() {
 
             <footer className="footer-badge glass-card" aria-label="Footer">
               <div className="footer-badge__copy">
-                <p className="eyebrow">Portfolio footer</p>
-                <strong>Built with a clear story, strong motion, and a modern engineering voice.</strong>
-                <span>Cloud, systems, networking, frontend, and research work brought together in one clean portfolio.</span>
+                <p className="eyebrow">Vraj Shah · VIT Bhopal · CGPA 8.75</p>
+                <strong>Linux systems, DevOps, cloud, networking, and full-stack development — open to internships and engineering collaborations.</strong>
+                <span>Founder of ScholarStack · 2 peer-reviewed papers · 40+ published articles · Solvit Hackathon Finalist.</span>
                 <div className="footer-badge__start">
                   <span>Start here</span>
                   <div className="footer-badge__start-links">

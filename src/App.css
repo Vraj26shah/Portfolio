@@ -260,9 +260,10 @@
   animation: scrollLinePulse 2.5s ease-in-out infinite;
 }
 
+/* Opacity-only animation — no width change, no layout recalc */
 @keyframes scrollLinePulse {
-  0%, 100% { width: 1.6rem; opacity: 0.5; }
-  50%       { width: 3rem;   opacity: 1; }
+  0%, 100% { opacity: 0.45; }
+  50%       { opacity: 1; }
 }
 
 /* ─── Scroll Progress Bar ─────────────────────────────────────────────────── */
@@ -279,10 +280,12 @@
 
 .scroll-progress__bar {
   height: 100%;
-  width: 0%;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
   background: linear-gradient(90deg, var(--accent-cyan), var(--accent-pink), var(--accent-gold));
   box-shadow: 0 0 12px rgba(123, 220, 255, 0.6);
-  transition: width 60ms linear;
+  /* No CSS transition — GSAP scrub controls this via transform directly */
 }
 
 /* ─── Topbar / Navbar ─────────────────────────────────────────────────────── */
@@ -310,9 +313,9 @@
 
 .topbar.is-scrolled {
   border-color: rgba(255, 255, 255, 0.08);
-  background: rgba(5, 9, 16, 0.72);
+  background: rgba(5, 9, 16, 0.88);
   box-shadow: 0 20px 48px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(28px) saturate(1.3);
+  backdrop-filter: blur(16px) saturate(1.2);
 }
 
 .brand-mark,
@@ -342,13 +345,14 @@
   height: 0.65rem;
   border-radius: 999px;
   background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
-  box-shadow: 0 0 22px rgba(123, 220, 255, 0.85);
+  box-shadow: 0 0 18px rgba(123, 220, 255, 0.7);
   animation: dotPulse 3s ease-in-out infinite;
 }
 
+/* Use transform+opacity only — no box-shadow change (paint-free) */
 @keyframes dotPulse {
-  0%, 100% { box-shadow: 0 0 22px rgba(123, 220, 255, 0.85); }
-  50% { box-shadow: 0 0 32px rgba(123, 220, 255, 1), 0 0 60px rgba(123, 220, 255, 0.3); }
+  0%, 100% { opacity: 0.82; transform: scale(1); }
+  50%       { opacity: 1;    transform: scale(1.18); }
 }
 
 .topnav {
@@ -421,13 +425,13 @@ main {
   border-radius: 2rem;
   border: 1px solid rgba(255, 255, 255, 0.09);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03)),
-    rgba(10, 14, 23, 0.76);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025)),
+    rgba(8, 12, 20, 0.9);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.07),
     0 24px 60px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(26px);
-  -webkit-backdrop-filter: blur(26px);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 .social-rail__item {
@@ -572,44 +576,31 @@ main {
 
 .glass-card {
   --card-bg:
-    radial-gradient(circle at top left, rgba(123, 220, 255, 0.08), transparent 28%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.03)),
-    rgba(7, 11, 19, 0.78);
-  --card-fill:
-    radial-gradient(circle at var(--cursor-fill-x, 50%) var(--cursor-fill-y, 50%), rgba(123, 220, 255, 0.02), transparent 52%);
+    radial-gradient(circle at top left, rgba(123, 220, 255, 0.07), transparent 28%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.025)),
+    rgba(8, 13, 22, 0.92);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  background: var(--card-fill), var(--card-bg);
+  background: var(--card-bg);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.1),
     0 28px 68px rgba(0, 0, 0, 0.32);
-  backdrop-filter: blur(24px);
+  /* Removed backdrop-filter — it forces GPU re-sample behind every card simultaneously.
+     Compensated with a more opaque background that still reads as glass. */
   isolation: isolate;
   overflow: hidden;
+  /* Only transition compositor-friendly properties */
   transition:
-    transform 340ms cubic-bezier(0.23, 1, 0.32, 1),
-    box-shadow 340ms ease,
-    border-color 340ms ease,
-    background 260ms ease;
+    transform 280ms cubic-bezier(0.23, 1, 0.32, 1),
+    box-shadow 280ms ease,
+    border-color 280ms ease;
 }
 
 .glass-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-2px);
   border-color: rgba(255, 255, 255, 0.16);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.12),
     0 36px 78px rgba(0, 0, 0, 0.36);
-}
-
-.is-cursor-filled {
-  --card-fill:
-    radial-gradient(circle at var(--cursor-fill-x, 50%) var(--cursor-fill-y, 50%), rgba(255, 106, 166, 0.22), transparent 34%),
-    radial-gradient(circle at calc(var(--cursor-fill-x, 50%) + 12%) calc(var(--cursor-fill-y, 50%) + 8%), rgba(123, 220, 255, 0.22), transparent 42%),
-    linear-gradient(135deg, rgba(8, 18, 32, 0.18), rgba(15, 12, 30, 0.04));
-  border-color: rgba(255, 255, 255, 0.14);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 0 80px rgba(123, 220, 255, 0.06),
-    0 28px 70px rgba(0, 0, 0, 0.28);
 }
 
 .story-note strong {
@@ -765,7 +756,8 @@ main {
 
 .reveal-word {
   display: inline-block;
-  will-change: transform, opacity;
+  /* will-change managed by GSAP at animation time — keeping it permanent
+     creates one compositing layer per word, exhausting mobile GPU memory */
 }
 
 .story-notes {
@@ -890,6 +882,9 @@ main {
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
     0 30px 70px rgba(0, 0, 0, 0.22);
   container-type: inline-size;
+  /* Isolate paints inside — changes in the work panels don't trigger
+     full-page repaint, critical for the smooth slide transitions */
+  contain: layout style paint;
 }
 
 .work-pane--arch .work-viewport {
@@ -993,7 +988,7 @@ main {
   padding: 0.75rem;
   box-sizing: border-box;
   background: #131820;
-  transition: transform 700ms cubic-bezier(0.23, 1, 0.32, 1);
+  transition: transform 380ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .arch-slide.is-active .arch-slide__frame img {
@@ -1010,12 +1005,11 @@ main {
   gap: 0.4rem;
   padding: 0.4rem 0.8rem;
   border-radius: 999px;
-  background: rgba(4, 10, 20, 0.82);
+  background: rgba(4, 10, 20, 0.92);
   border: 1px solid rgba(123, 220, 255, 0.28);
   color: rgba(123, 220, 255, 0.9);
   font-size: 0.74rem;
   letter-spacing: 0.08em;
-  backdrop-filter: blur(8px);
   opacity: 0;
   transform: translateY(4px);
   transition: opacity 220ms ease, transform 220ms ease;
@@ -1035,8 +1029,8 @@ main {
   display: grid;
   place-items: center;
   padding: 1.5rem;
-  background: rgba(2, 6, 14, 0.88);
-  backdrop-filter: blur(20px) saturate(1.2);
+  background: rgba(2, 6, 14, 0.92);
+  backdrop-filter: blur(12px) saturate(1.1);
   cursor: zoom-out;
   animation: lbFadeIn 0.22s ease;
 }
@@ -1445,15 +1439,18 @@ main {
 }
 
 .work-progress-dot {
-  width: 0.42rem;
+  /* Fixed at full width; scaleX shrinks inactive dots — avoids layout reflow */
+  width: 1.6rem;
   height: 0.42rem;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.22);
-  transition: width 0.35s cubic-bezier(0.23, 1, 0.32, 1), background 0.35s ease;
+  transform: scaleX(0.26);
+  transform-origin: left center;
+  transition: transform 0.35s cubic-bezier(0.23, 1, 0.32, 1), background 0.35s ease;
 }
 
 .work-progress-dot.is-active {
-  width: 1.6rem;
+  transform: scaleX(1);
   background: #7bdcff;
 
 
@@ -1812,7 +1809,8 @@ main {
 
 /* ─── Reveal Animation Classes ────────────────────────────────────────────── */
 .reveal-up {
-  will-change: transform, opacity;
+  /* will-change managed by GSAP — permanent will-change on every section element
+     wastes compositing layer memory, especially on mobile */
 }
 
 /* ─── Footer Badge ────────────────────────────────────────────────────────── */
@@ -2396,5 +2394,73 @@ main {
 
   .footer-badge {
     padding: 1.25rem;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PERFORMANCE — Mobile GPU Budget
+   Remove backdrop-filter on phones where GPU memory is constrained.
+   The topbar uses an opaque fallback that still reads as premium.
+   ═══════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* Topbar: drop blur entirely on mobile, use opaque dark pill instead */
+  .topbar.is-scrolled {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(5, 9, 16, 0.97);
+  }
+
+  /* Mobile nav: solid background is just as premium at full opacity */
+  .mobile-nav {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(4, 8, 15, 0.99);
+  }
+
+  /* Lightbox on mobile: lighter blur for reduced GPU pressure */
+  .arch-lightbox {
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  /* Disable hover transitions on touch — they cause a "stuck hover" flash */
+  .glass-card,
+  .button,
+  .topbar-cta,
+  .social-rail__item,
+  .service-card__icon,
+  .project-card__link,
+  .arch-slide__frame {
+    transition-duration: 0ms;
+  }
+
+  /* Contact card border spin animation is a GPU cost on mobile */
+  .contact-card::before {
+    animation: none;
+    opacity: 0.3;
+  }
+
+  /* Dot pulse still works but skip box-shadow re-renders via shorter animation */
+  .brand-mark__dot {
+    animation-duration: 4s;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PERFORMANCE — Reduced Motion
+   Respects OS accessibility setting and also happens to feel faster.
+   ═══════════════════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .arch-slide,
+  .project-card-slide {
+    transition: opacity 150ms ease !important;
   }
 }
