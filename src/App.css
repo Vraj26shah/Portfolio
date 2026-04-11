@@ -1716,11 +1716,126 @@ main {
   gap: 0.45rem;
 }
 
+/* ─── Hamburger Button ────────────────────────────────────────────────────── */
+.topbar-menu-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 2.6rem;
+  height: 2.6rem;
+  padding: 0.45rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  cursor: pointer;
+  z-index: 25;
+  flex-shrink: 0;
+}
+
+.topbar-menu-btn span {
+  display: block;
+  width: 1.1rem;
+  height: 1.5px;
+  background: rgba(241, 246, 255, 0.9);
+  border-radius: 999px;
+  transition: transform 300ms cubic-bezier(0.23, 1, 0.32, 1), opacity 300ms ease, width 300ms ease;
+}
+
+.topbar-menu-btn.is-open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.topbar-menu-btn.is-open span:nth-child(2) { opacity: 0; width: 0; }
+.topbar-menu-btn.is-open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* ─── Mobile Nav Drawer ───────────────────────────────────────────────────── */
+.mobile-nav {
+  position: fixed;
+  inset: 0;
+  z-index: 18;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 2rem 3rem;
+  background: rgba(4, 8, 15, 0.97);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 350ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.mobile-nav.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-nav__links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  width: 100%;
+}
+
+.mobile-nav__links a {
+  display: block;
+  padding: 0.9rem 1.5rem;
+  color: rgba(241, 246, 255, 0.75);
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 7vw, 2.8rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  transition: color 200ms ease;
+  text-align: center;
+}
+
+.mobile-nav__links a:hover,
+.mobile-nav__links a.is-active {
+  color: var(--text-primary);
+}
+
+.mobile-nav__social {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mobile-nav__social a {
+  display: inline-grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(241, 246, 255, 0.85);
+  font-size: 1.2rem;
+  transition: border-color 200ms ease, background 200ms ease, color 200ms ease;
+}
+
+.mobile-nav__social a:hover {
+  border-color: rgba(123, 220, 255, 0.35);
+  background: rgba(123, 220, 255, 0.1);
+  color: var(--accent-cyan);
+}
+
 /* ═══════════════════════════════════════════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════════════════════════════════════════ */
 @media (max-width: 1120px) {
   .topnav {
+    display: none;
+  }
+
+  .topbar-menu-btn {
+    display: flex;
+  }
+
+  .topbar-cta {
     display: none;
   }
 
@@ -1786,12 +1901,9 @@ main {
     padding: 0.8rem 0.9rem;
   }
 
-  .topbar-cta {
-    display: none;
-  }
-
+  /* Social rail: hide the fixed side rail on mobile — nav drawer has social links */
   .social-rail {
-    left: 0.9rem;
+    display: none;
   }
 
   .hero-section {
@@ -1809,41 +1921,60 @@ main {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  /* Showcase section — no pin on mobile, just static layout */
+  .showcase-shell {
+    min-height: auto;
+  }
+
   .showcase-frame {
     grid-template-columns: 1fr;
-    padding: 5rem 0;
+    padding: 3rem 0;
   }
 
   .showcase-copy {
     padding-top: 0;
   }
 
-  .section-shell,
-  .work-section {
-    padding: 5rem 0;
-  }
-
+  /* Feature cards: static on mobile (GSAP pin disabled) */
   .feature-stack {
-    min-height: 26rem;
+    position: relative;
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
 
   .feature-card {
-    width: 100%;
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .section-shell {
+    padding: 4rem 0;
   }
 
   .work-section {
-    padding: 3rem 0 0;
+    padding: 3rem 0 2rem;
     min-height: auto;
   }
 
+  /* Override the fixed height — on mobile there's no GSAP pin */
   .work-stage {
+    height: auto;
     min-height: auto;
     gap: 1.25rem;
+    padding: 0 1rem 1.5rem;
   }
 
   .work-viewport {
     overflow-x: auto;
     overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
   }
 
   .work-rail {
@@ -1851,11 +1982,12 @@ main {
   }
 
   .project-card {
-    width: min(80vw, 24rem);
+    width: min(80vw, 22rem);
   }
 
   .project-card:hover {
     transform: none;
+    box-shadow: none;
   }
 
   .process-grid {
@@ -1925,6 +2057,21 @@ main {
   }
 }
 
+/* ─── Tablet: services in 2 columns, better story layout ──────────────────── */
+@media (min-width: 481px) and (max-width: 768px) {
+  .services-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hero-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .project-card {
+    width: min(72vw, 22rem);
+  }
+}
+
 @media (max-width: 480px) {
   .hero-title {
     font-size: clamp(2.8rem, 14vw, 4.2rem);
@@ -1950,16 +2097,6 @@ main {
 
   .hero-metrics {
     grid-template-columns: 1fr;
-  }
-
-  .social-rail {
-    left: 0.65rem;
-    padding: 0.6rem 0.46rem;
-  }
-
-  .social-rail__item {
-    width: 2.65rem;
-    height: 2.65rem;
   }
 
   .resume-preview__sheet {

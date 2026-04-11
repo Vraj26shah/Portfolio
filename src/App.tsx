@@ -235,12 +235,29 @@ export default function App() {
   const [isReady, setIsReady] = useState(false);
   const [showLoader, setShowLoader] = useState(true);
   const [activeSection, setActiveSection] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  // Close mobile menu on resize to desktop
+  useEffect(() => {
+    const onResize = () => {
+      if (window.innerWidth > 1120) setMenuOpen(false);
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [menuOpen]);
 
   // Smooth bidirectional scroll for all anchor links
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const href = e.currentTarget.getAttribute("href");
     if (!href || !href.startsWith("#")) return;
     e.preventDefault();
+    setMenuOpen(false);
     const smoother = smootherRef.current ?? ScrollSmoother.get();
     if (smoother) {
       smoother.scrollTo(href, true, "top top");
@@ -433,8 +450,12 @@ export default function App() {
 
       scrollState.progress = 0;
 
-      gsap.set(".feature-card", { autoAlpha: 0, yPercent: 16, scale: 0.96 });
-      gsap.set(".feature-card.is-first", { autoAlpha: 1, yPercent: 0, scale: 1 });
+      const isMobile = window.innerWidth <= 768;
+
+      if (!isMobile) {
+        gsap.set(".feature-card", { autoAlpha: 0, yPercent: 16, scale: 0.96 });
+        gsap.set(".feature-card.is-first", { autoAlpha: 1, yPercent: 0, scale: 1 });
+      }
 
       const introTimeline = gsap.timeline({ defaults: { ease: "power3.out" } });
       introTimeline
@@ -501,38 +522,41 @@ export default function App() {
       });
 
       const featureCards = gsap.utils.toArray<HTMLElement>(".feature-card");
-      const featureTimeline = gsap.timeline({
-        scrollTrigger: {
-          trigger: ".showcase-shell",
-          start: "top top",
-          end: "+=260%",
-          scrub: 1,
-          pin: true,
-          anticipatePin: 1,
-        },
-      });
 
-      featureCards.forEach((card, index) => {
-        const position = index * 1.05;
-        if (index > 0) {
-          featureTimeline.fromTo(
-            card,
-            { autoAlpha: 0, yPercent: 16, scale: 0.96 },
-            { autoAlpha: 1, yPercent: 0, scale: 1, duration: 0.35 },
-            position,
-          );
-          featureTimeline.to(
-            featureCards[index - 1],
-            { autoAlpha: 0.15, yPercent: -18, scale: 0.95, duration: 0.35 },
-            position,
-          );
-        }
-        if (index < featureCards.length - 1) {
-          featureTimeline.to(card, { autoAlpha: 0.18, yPercent: -20, scale: 0.95, duration: 0.35 }, position + 0.58);
-        } else {
-          featureTimeline.to(card, { autoAlpha: 1, yPercent: -4, scale: 1.02, duration: 0.4 }, position + 0.6);
-        }
-      });
+      if (!isMobile) {
+        const featureTimeline = gsap.timeline({
+          scrollTrigger: {
+            trigger: ".showcase-shell",
+            start: "top top",
+            end: "+=260%",
+            scrub: 1,
+            pin: true,
+            anticipatePin: 1,
+          },
+        });
+
+        featureCards.forEach((card, index) => {
+          const position = index * 1.05;
+          if (index > 0) {
+            featureTimeline.fromTo(
+              card,
+              { autoAlpha: 0, yPercent: 16, scale: 0.96 },
+              { autoAlpha: 1, yPercent: 0, scale: 1, duration: 0.35 },
+              position,
+            );
+            featureTimeline.to(
+              featureCards[index - 1],
+              { autoAlpha: 0.15, yPercent: -18, scale: 0.95, duration: 0.35 },
+              position,
+            );
+          }
+          if (index < featureCards.length - 1) {
+            featureTimeline.to(card, { autoAlpha: 0.18, yPercent: -20, scale: 0.95, duration: 0.35 }, position + 0.58);
+          } else {
+            featureTimeline.to(card, { autoAlpha: 1, yPercent: -4, scale: 1.02, duration: 0.4 }, position + 0.6);
+          }
+        });
+      }
 
       gsap.utils.toArray<HTMLElement>(".reveal-up").forEach((element) => {
         gsap.fromTo(
@@ -736,7 +760,52 @@ export default function App() {
             <a className="topbar-cta" href="#contact" onClick={handleNavClick}>
               Connect with me <FiArrowUpRight />
             </a>
+
+            <button
+              className={`topbar-menu-btn${menuOpen ? " is-open" : ""}`}
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={menuOpen}
+              onClick={() => setMenuOpen((prev) => !prev)}
+            >
+              <span />
+              <span />
+              <span />
+            </button>
           </header>
+
+          {/* Mobile navigation drawer */}
+          <nav className={`mobile-nav${menuOpen ? " is-open" : ""}`} aria-label="Mobile navigation">
+            <div className="mobile-nav__links">
+              {navLinks.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={handleNavClick}
+                  className={activeSection === link.href.slice(1) ? "is-active" : ""}
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
+            <div className="mobile-nav__social">
+              {socialLinks.map((link) => {
+                const Icon = link.icon;
+                return (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={link.label}
+                    title={link.label}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    <Icon />
+                  </a>
+                );
+              })}
+            </div>
+          </nav>
 
           <aside className="social-rail" aria-label="Social links">
             {socialLinks.map((link) => {
