@@ -1478,10 +1478,93 @@ main {
   text-decoration: none;
 }
 
-/* ─── Tech Stack — moncy.dev style ────────────────────────────────────────── */
+/* ─── Tech Stack ──────────────────────────────────────────────────────────── */
 .techstack-shell {
   padding: 0;
   overflow: hidden;
+}
+
+/* Suspense skeleton — dark rectangle while the lazy chunk loads */
+.techstack-skeleton {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  height: clamp(36rem, 80vh, 58rem);
+  background: #000;
+}
+
+/* ── Static mobile fallback ───────────────────────────────────────────────── */
+.techstack-static {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  height: clamp(22rem, 55vw, 32rem);
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  isolation: isolate;
+  gap: 1.5rem;
+}
+
+/* shared ghost title — used by both desktop (.techstack-moncy) and mobile (.techstack-static) */
+.techstack-static .techstack-ghost-title {
+  font-size: clamp(3rem, 11vw, 5rem);
+}
+
+.techstack-marquee-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.techstack-marquee-row {
+  display: flex;
+  gap: 0.75rem;
+  /* Prevent wrapping — the duplicated items provide the seamless loop */
+  flex-wrap: nowrap;
+  width: max-content;
+  animation: marquee-fwd 28s linear infinite;
+}
+
+.techstack-marquee-row--rev {
+  animation-name: marquee-rev;
+  animation-duration: 32s;
+}
+
+@keyframes marquee-fwd {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes marquee-rev {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+.techstack-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(230, 242, 255, 0.9);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.techstack-chip img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .techstack-moncy {

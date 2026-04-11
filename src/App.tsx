@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -19,7 +19,9 @@ import {
   FiX,
 } from "react-icons/fi";
 import { FaMedium } from "react-icons/fa6";
-import TechStack from "./components/TechStack";
+// Lazy-loaded so the entire Three.js + Rapier + postprocessing bundle (~1.1 MB gz)
+// is split into a separate chunk and only fetched when the user scrolls near the Stack section.
+const TechStack = lazy(() => import("./components/TechStack"));
 import "./App.css";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
@@ -241,9 +243,25 @@ export default function App() {
   const contentRef = useRef<HTMLDivElement>(null);
   const workSectionRef = useRef<HTMLElement>(null);
   const scrollBarRef = useRef<HTMLDivElement>(null);
+  const techStackSentinelRef = useRef<HTMLDivElement>(null);
   const [isReady] = useState(true);
   const [loaderProgress, setLoaderProgress] = useState(0);
   const [loaded, setLoaded] = useState(false);
+  // Only mount the heavy Three.js canvas when the user scrolls near the Stack section.
+  // rootMargin: "400px" triggers the import ~400 px before the element enters the viewport,
+  // giving the browser time to fetch the chunk without the user noticing any delay.
+  const [showTechStack, setShowTechStack] = useState(false);
+
+  useEffect(() => {
+    const el = techStackSentinelRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setShowTechStack(true); obs.disconnect(); } },
+      { rootMargin: "400px" },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   useEffect(() => {
     // Cinematic loader — progress 0→100 over ~1.8s using RAF, then fade out
@@ -846,7 +864,7 @@ export default function App() {
               <div className="showcase-frame">
                 <div className="showcase-copy reveal-up">
                   <p className="eyebrow">What I bring</p>
-                  <h2>Systems thinker. Platform builder. Research contributor. Actively growing into DevOps, cloud, and cybersecurity.</h2>
+                  <h2>Systems thinker. Platform builder. Researcher.</h2>
                 </div>
 
                 <div className="feature-stack">
@@ -867,7 +885,7 @@ export default function App() {
             <section id="story" className="story-section section-shell">
               <div className="section-heading reveal-up">
                 <p className="eyebrow">Story</p>
-                <h2>CS undergrad at VIT Bhopal — building real systems since day one, not just coursework.</h2>
+                <h2>Building real systems since day one.</h2>
               </div>
 
               <div className="story-grid">
@@ -897,7 +915,7 @@ export default function App() {
             <section id="craft" className="services-section section-shell">
               <div className="section-heading reveal-up">
                 <p className="eyebrow">Craft</p>
-                <h2>Infrastructure, security, and full-stack — three disciplines, one engineer, all production-tested.</h2>
+                <h2>Infra. Security. Full-stack. All production-tested.</h2>
               </div>
 
               <div className="services-grid">
@@ -922,7 +940,7 @@ export default function App() {
               <div className="work-stage">
                 <div className="work-intro reveal-up">
                   <p className="eyebrow">Selected work</p>
-                  <h2>Seven projects across DevOps, networking, ML research, and full-stack.</h2>
+                  <h2>Seven shipped projects.</h2>
                   <p className="work-intro__text">
                     Scroll to step through each project. System architecture on the left, engineering breakdown on the right — click any diagram to open full-screen.
                   </p>
@@ -1048,7 +1066,13 @@ export default function App() {
             </section>
 
             <section id="stack" className="section-shell techstack-shell">
-              <TechStack />
+              {/* Sentinel div — IntersectionObserver watches this to trigger the lazy import */}
+              <div ref={techStackSentinelRef} style={{ minHeight: "1px" }} />
+              {showTechStack && (
+                <Suspense fallback={<div className="techstack-skeleton" aria-hidden="true" />}>
+                  <TechStack />
+                </Suspense>
+              )}
             </section>
 
             <div className="section-divider" aria-hidden="true" />
@@ -1056,7 +1080,7 @@ export default function App() {
             <section id="process" className="process-section section-shell">
               <div className="section-heading reveal-up">
                 <p className="eyebrow">How I work</p>
-                <h2>From first principles to production — the same approach I used to build and ship ScholarStack solo.</h2>
+                <h2>From first principles to production.</h2>
               </div>
 
               <div className="process-grid">
@@ -1081,13 +1105,13 @@ export default function App() {
             <section id="resume" className="resume-section section-shell">
               <div className="section-heading reveal-up">
                 <p className="eyebrow">Resume & Research</p>
-                <h2>One year of production experience, two peer-reviewed papers, and seven shipped projects.</h2>
+                <h2>One year. Two papers. Seven projects.</h2>
               </div>
 
               <div className="resume-layout">
                 <div className="resume-copy glass-card reveal-up">
                   <span className="resume-copy__label">Resume</span>
-                  <h3>B.Tech Computer Science · VIT Bhopal · CGPA 8.75 · DevOps, Cloud, Networking, Full-Stack.</h3>
+                  <h3>B.Tech CS · VIT Bhopal · CGPA 8.75</h3>
                   <p>
                     Open to internships, collaborations, and engineering opportunities across cloud infrastructure, DevOps, cybersecurity, and full-stack development.
                   </p>
@@ -1148,7 +1172,7 @@ export default function App() {
             <section id="contact" className="contact-section">
               <div className="contact-card glass-card reveal-up">
                 <p className="eyebrow">Contact</p>
-                <h2>Open to internships, research collaborations, and engineering teams doing real work.</h2>
+                <h2>Let's build something real.</h2>
                 <p>
                   Cloud infrastructure, DevOps, cybersecurity, or full-stack — if the problem is interesting, I want to hear about it. Reach out directly.
                 </p>
