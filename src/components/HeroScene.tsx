@@ -14,10 +14,10 @@ export const scrollState = { progress: 0 };
 
 /* ─── Orbital ring data ─────────────────────────────────────────────────── */
 const RINGS = [
-  { radius: 2.15, tilt: [0.88, 0.22, 0] as [number, number, number], color: "#56c8ff", thickness: 0.032, speed: 0.19, segments: 220 },
-  { radius: 2.9,  tilt: [0.36, 0.42, 1.18] as [number, number, number], color: "#ff78b2", thickness: 0.024, speed: -0.24, segments: 260 },
-  { radius: 3.65, tilt: [1.28, -0.18, 0.6] as [number, number, number], color: "#ffd86d", thickness: 0.018, speed: 0.15, segments: 300 },
-  { radius: 4.4,  tilt: [0.55, 0.78, -0.4] as [number, number, number], color: "#78ddff", thickness: 0.014, speed: -0.11, segments: 340 },
+  { radius: 2.15, tilt: [0.88, 0.22, 0] as [number, number, number], color: "#56c8ff", thickness: 0.032, speed: 0.19, segments: 90 },
+  { radius: 2.9,  tilt: [0.36, 0.42, 1.18] as [number, number, number], color: "#ff78b2", thickness: 0.024, speed: -0.24, segments: 110 },
+  { radius: 3.65, tilt: [1.28, -0.18, 0.6] as [number, number, number], color: "#ffd86d", thickness: 0.018, speed: 0.15, segments: 130 },
+  { radius: 4.4,  tilt: [0.55, 0.78, -0.4] as [number, number, number], color: "#78ddff", thickness: 0.014, speed: -0.11, segments: 150 },
 ];
 
 /* ─── Orbital node placement ────────────────────────────────────────────── */
@@ -94,7 +94,7 @@ function OrbitalNode({ color, size }: { color: string; size: number }) {
   return (
     <Float speed={1.1} rotationIntensity={0.1} floatIntensity={0.14}>
       <mesh ref={meshRef}>
-        <sphereGeometry args={[size, 12, 12]} />
+        <sphereGeometry args={[size, 7, 7]} />
         <meshStandardMaterial
           color={color}
           emissive={color}
@@ -112,7 +112,7 @@ function ScanArc() {
 
   const arcPoints = useMemo(() => {
     const curve = new EllipseCurve(0, 0, 1.85, 1.85, -Math.PI / 3, Math.PI / 3, false, 0);
-    return curve.getPoints(60).map((p) => new Vector3(p.x, 0, p.y));
+    return curve.getPoints(24).map((p) => new Vector3(p.x, 0, p.y));
   }, []);
 
   useFrame((_state, delta) => {
@@ -169,6 +169,8 @@ function PacketObservatory() {
   const coreMaterialRef = useRef<MeshPhysicalMaterial>(null);
   const innerRef = useRef<Mesh>(null);
   const tempColor = useRef(new Color("#78ddff"));
+  const accentA = useRef(new Color("#ff7db0"));
+  const accentB = useRef(new Color("#ffd86d"));
 
   useFrame((state, delta) => {
     const elapsed = state.clock.getElapsedTime();
@@ -214,8 +216,8 @@ function PacketObservatory() {
 
     const accent = tempColor.current;
     accent.set("#78ddff");
-    accent.lerp(new Color("#ff7db0"), systemPhase * 0.38);
-    accent.lerp(new Color("#ffd86d"), finalePhase * 0.55);
+    accent.lerp(accentA.current, systemPhase * 0.38);
+    accent.lerp(accentB.current, finalePhase * 0.55);
 
     if (coreMaterialRef.current) {
       coreMaterialRef.current.color.lerp(accent, 0.04);
@@ -263,7 +265,7 @@ function PacketObservatory() {
 
       {/* Inner torus-knot energy trace */}
       <mesh ref={innerRef}>
-        <torusKnotGeometry args={[0.58, 0.11, 200, 22, 2, 3]} />
+        <torusKnotGeometry args={[0.58, 0.11, 64, 10, 2, 3]} />
         <meshPhysicalMaterial
           color="#ffe187"
           emissive="#ff6fa8"
@@ -309,7 +311,7 @@ function PacketObservatory() {
 
       {/* Soft glow sphere behind everything */}
       <mesh position={[0, 0, -0.8]}>
-        <sphereGeometry args={[2.3, 32, 32]} />
+        <sphereGeometry args={[2.3, 14, 14]} />
         <meshBasicMaterial color="#1483d3" transparent opacity={0.09} />
       </mesh>
     </group>
@@ -318,20 +320,18 @@ function PacketObservatory() {
 
 export default function HeroScene() {
   return (
-    <Canvas camera={{ position: [0, 0.12, 6.5], fov: 34 }} dpr={[1, 2]} gl={{ alpha: true, antialias: true }}>
+    <Canvas camera={{ position: [0, 0.12, 6.5], fov: 34 }} dpr={[0.75, 1.5]} gl={{ alpha: true, antialias: false }} performance={{ min: 0.5 }}>
       <color attach="background" args={["#030711"]} />
-      <fog attach="fog" args={["#030711", 9, 20]} />
 
       <ambientLight intensity={0.72} />
       <directionalLight position={[4.8, 4.5, 4]} intensity={2.0} color="#effcff" />
       <directionalLight position={[-5, -3, 2]} intensity={1.1} color="#42b5ff" />
       <pointLight position={[3.2, 1.4, -1.8]} intensity={16} color="#ff84ba" />
       <pointLight position={[-3.1, 1.8, 2.9]} intensity={16} color="#5fc8ff" />
-      <pointLight position={[0, 0, 0]} intensity={8} color="#78ddff" />
 
       {/* Deep-space star field */}
-      <Sparkles count={220} size={2.2} scale={[18, 12, 14]} speed={0.18} color="#8fe8ff" opacity={0.36} />
-      <Sparkles count={100} size={3.0} scale={[16, 9, 11]} speed={0.28} color="#ff9ac2" opacity={0.14} />
+      <Sparkles count={80} size={2.2} scale={[18, 12, 14]} speed={0.18} color="#8fe8ff" opacity={0.36} />
+      <Sparkles count={30} size={3.0} scale={[16, 9, 11]} speed={0.28} color="#ff9ac2" opacity={0.14} />
 
       <PacketObservatory />
     </Canvas>

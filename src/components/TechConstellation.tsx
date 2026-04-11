@@ -64,11 +64,11 @@ function ConstellationRig() {
     <group ref={rigRef}>
       <group ref={ringRef}>
         <mesh rotation={[0.9, 0.1, 0]}>
-          <torusGeometry args={[2.35, 0.03, 24, 160]} />
+          <torusGeometry args={[2.35, 0.03, 16, 80]} />
           <meshStandardMaterial color="#7fe0ff" emissive="#56beff" emissiveIntensity={1.2} roughness={0.1} metalness={0.7} />
         </mesh>
         <mesh rotation={[0.4, 0.3, 1.1]}>
-          <torusGeometry args={[3.05, 0.022, 18, 180]} />
+          <torusGeometry args={[3.05, 0.022, 14, 90]} />
           <meshStandardMaterial color="#ff91c2" emissive="#ff7fb5" emissiveIntensity={0.92} roughness={0.1} metalness={0.66} />
         </mesh>
       </group>
@@ -87,7 +87,7 @@ function ConstellationRig() {
       </mesh>
 
       <mesh>
-        <torusKnotGeometry args={[0.48, 0.11, 160, 24, 2, 3]} />
+        <torusKnotGeometry args={[0.48, 0.11, 64, 10, 2, 3]} />
         <meshStandardMaterial color="#ffd86d" emissive="#ff9fc7" emissiveIntensity={1.05} roughness={0.08} metalness={0.62} />
       </mesh>
 
@@ -145,13 +145,13 @@ function ConstellationRig() {
 
 export default function TechConstellation() {
   return (
-    <Canvas camera={{ position: [0, 0.08, 7.4], fov: 34 }} dpr={[1, 2]} gl={{ alpha: true, antialias: true }}>
+    <Canvas camera={{ position: [0, 0.08, 7.4], fov: 34 }} dpr={[0.75, 1.5]} gl={{ alpha: true, antialias: false }} performance={{ min: 0.5 }}>
       <ambientLight intensity={0.86} />
       <directionalLight position={[4.2, 4.4, 3.6]} intensity={1.9} color="#effcff" />
       <pointLight position={[-3, 1.4, 2]} intensity={14} color="#58caff" />
       <pointLight position={[2.2, 1.5, -1.4]} intensity={12} color="#ff89bb" />
 
-      <Sparkles count={110} size={2.2} scale={[12, 8, 10]} speed={0.24} color="#8fe8ff" opacity={0.35} />
+      <Sparkles count={55} size={2.2} scale={[12, 8, 10]} speed={0.24} color="#8fe8ff" opacity={0.35} />
       <ConstellationRig />
     </Canvas>
   );

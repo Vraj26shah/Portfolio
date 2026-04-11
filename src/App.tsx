@@ -561,11 +561,10 @@ export default function App() {
       gsap.utils.toArray<HTMLElement>(".reveal-up").forEach((element) => {
         gsap.fromTo(
           element,
-          { autoAlpha: 0, y: 54, filter: "blur(6px)" },
+          { autoAlpha: 0, y: 54 },
           {
             autoAlpha: 1,
             y: 0,
-            filter: "blur(0px)",
             duration: 1,
             ease: "power3.out",
             scrollTrigger: {
@@ -581,12 +580,11 @@ export default function App() {
       if (serviceCards.length) {
         gsap.fromTo(
           serviceCards,
-          { autoAlpha: 0, y: 60, scale: 0.95, filter: "blur(4px)" },
+          { autoAlpha: 0, y: 60, scale: 0.95 },
           {
             autoAlpha: 1,
             y: 0,
             scale: 1,
-            filter: "blur(0px)",
             duration: 0.85,
             stagger: 0.12,
             ease: "power3.out",
@@ -666,12 +664,11 @@ export default function App() {
       if (timelineSteps.length) {
         gsap.fromTo(
           timelineSteps,
-          { autoAlpha: 0, y: 48, x: -20, filter: "blur(4px)" },
+          { autoAlpha: 0, y: 48, x: -20 },
           {
             autoAlpha: 1,
             y: 0,
             x: 0,
-            filter: "blur(0px)",
             duration: 0.85,
             stagger: 0.15,
             ease: "power3.out",

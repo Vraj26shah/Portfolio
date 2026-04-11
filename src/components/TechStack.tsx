@@ -48,7 +48,7 @@ const techItems: TechItem[] = [
 /* ──────────────────────────────────────────────────────────────────────────
    Shared geometry + scale palette
    ────────────────────────────────────────────────────────────────────────── */
-const SPHERE_GEO = new THREE.SphereGeometry(1, 32, 32);
+const SPHERE_GEO = new THREE.SphereGeometry(1, 16, 16);
 const SCALES = [1.08, 1.18, 1.26, 1.34, 1.14, 1.22];
 const TEX = 512;
 
@@ -294,7 +294,7 @@ export default function TechStack() {
 
       <Canvas
         shadows
-        gl={{ alpha: true, antialias: true, stencil: false }}
+        gl={{ alpha: true, antialias: false, stencil: false }}
         dpr={[1, 1.5]}
         camera={{ position: [0, 0, 20], fov: 32, near: 1, far: 100 }}
         onCreated={(s) => {
