@@ -911,7 +911,7 @@ function SceneContent() {
 
       {/* Data packets gliding along edges */}
       <instancedMesh ref={pktMesh} args={[undefined, undefined, MAX_EDGES]}>
-        <sphereGeometry args={[0.040, 6, 6]} />
+        <sphereGeometry args={[0.065, 8, 8]} />
         <meshBasicMaterial vertexColors toneMapped={false} />
       </instancedMesh>
     </group>

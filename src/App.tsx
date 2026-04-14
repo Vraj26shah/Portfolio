@@ -226,11 +226,7 @@ const processSteps = [
 ];
 
 function renderWords(text: string) {
-  return text.split(" ").map((word, index) => (
-    <span key={`${word}-${index}`} className="reveal-word">
-      {word}&nbsp;
-    </span>
-  ));
+  return <>{text}</>;
 }
 
 export default function App() {
@@ -271,7 +267,7 @@ export default function App() {
     let raf: number;
 
     const tick = (now: number) => {
-      const p = Math.min(100, Math.round(((now - start) / DURATION) * 100));
+      const p = Math.max(0, Math.min(100, Math.round(((now - start) / DURATION) * 100)));
       setLoaderProgress(p);
       if (p < 100) {
         raf = requestAnimationFrame(tick);
@@ -446,8 +442,8 @@ export default function App() {
           scrollTrigger: {
             trigger: ".showcase-shell",
             start: "top top",
-            end: "+=260%",
-            scrub: 1,
+            end: "+=120%",
+            scrub: 0.6,
             pin: true,
             anticipatePin: 1,
           },
@@ -498,32 +494,30 @@ export default function App() {
       if (serviceCards.length) {
         gsap.fromTo(
           serviceCards,
-          { autoAlpha: 0, y: 60, scale: 0.95 },
+          { autoAlpha: 0, y: 50, scale: 0.96 },
           {
             autoAlpha: 1,
             y: 0,
             scale: 1,
-            duration: 0.85,
-            stagger: 0.12,
+            duration: 0.6,
+            stagger: 0.1,
             ease: "power3.out",
             scrollTrigger: {
               trigger: ".services-grid",
-              start: "top 78%",
+              start: "top 82%",
             },
           },
         );
       }
 
       gsap.utils.toArray<HTMLElement>(".reveal-word-group").forEach((element) => {
-        const words = element.querySelectorAll(".reveal-word");
         gsap.fromTo(
-          words,
-          { autoAlpha: 0, yPercent: 120 },
+          element,
+          { autoAlpha: 0, y: 28 },
           {
             autoAlpha: 1,
-            yPercent: 0,
-            duration: 0.8,
-            stagger: 0.045,
+            y: 0,
+            duration: 0.55,
             ease: "power3.out",
             scrollTrigger: {
               trigger: element,
@@ -644,7 +638,7 @@ export default function App() {
           <div className="loading-screen__inner">
             <p className="loading-screen__label">Preparing cinematic mode</p>
             <span className="loading-screen__value">
-              {String(loaderProgress).padStart(2, "0")}
+              {String(Math.max(0, loaderProgress)).padStart(2, "0")}
             </span>
             <div className="loading-screen__line-shell">
               <div
@@ -931,7 +925,7 @@ export default function App() {
                 {services.map((service) => {
                   const Icon = service.icon;
                   return (
-                    <article key={service.title} className="service-card glass-card reveal-up">
+                    <article key={service.title} className="service-card glass-card">
                       <span className="service-card__icon">
                         <Icon />
                       </span>
@@ -1126,11 +1120,11 @@ export default function App() {
                   </p>
 
                   <div className="resume-actions">
-                    <a className="button button--primary" href="https://drive.google.com/file/d/1iB-za6zlcpj9CG8PNOv2prKdbUxe-TkH/view?usp=drive_link" target="_blank" rel="noreferrer">
+                    <a className="button button--primary" href="https://drive.google.com/file/d/1Da7fbSMTyYshX6KQ6iC4eOr9vYaJYfqk/view?usp=sharing" target="_blank" rel="noreferrer">
                       <FiFileText />
                       View Resume
                     </a>
-                    <a className="button button--ghost" href="https://drive.google.com/file/d/1iB-za6zlcpj9CG8PNOv2prKdbUxe-TkH/view?usp=drive_link" target="_blank" rel="noreferrer">
+                    <a className="button button--ghost" href="https://drive.google.com/uc?export=download&id=1Da7fbSMTyYshX6KQ6iC4eOr9vYaJYfqk" target="_blank" rel="noreferrer">
                       <FiArrowDownRight />
                       Download PDF
                     </a>
@@ -1155,23 +1149,13 @@ export default function App() {
                 </div>
 
                 <div className="resume-preview glass-card reveal-up" aria-label="Resume preview">
-                  <div className="resume-preview__sheet">
-                    <div className="resume-preview__top">
-                      <strong>Vraj Shah</strong>
-                      <span>vraj1012006shah@gmail.com</span>
-                    </div>
-                    <div className="resume-preview__grid">
-                      <div />
-                      <div />
-                      <div />
-                      <div />
-                      <div />
-                      <div />
-                    </div>
-                    <div className="resume-preview__footer">
-                      <span>Click "View Resume" to open the full document.</span>
-                    </div>
-                  </div>
+                  <iframe
+                    className="resume-preview__iframe"
+                    src="https://drive.google.com/file/d/1Da7fbSMTyYshX6KQ6iC4eOr9vYaJYfqk/preview"
+                    title="Vraj Shah Resume"
+                    allow="autoplay"
+                    loading="lazy"
+                  />
                 </div>
               </div>
             </section>

@@ -68,7 +68,7 @@ function StaticTechGrid() {
 /* ──────────────────────────────────────────────────────────────────────────
    Canvas texture helpers
    ────────────────────────────────────────────────────────────────────────── */
-const SPHERE_GEO = new THREE.SphereGeometry(1, 14, 14); // slightly fewer segments
+const SPHERE_GEO = new THREE.SphereGeometry(1, 12, 12);
 const SCALES    = [1.08, 1.18, 1.26, 1.34, 1.14, 1.22];
 const TEX       = 512;
 
@@ -133,14 +133,44 @@ function makeMaterial(tex: THREE.CanvasTexture, dark: boolean) {
 /* ──────────────────────────────────────────────────────────────────────────
    Physics ball
    ────────────────────────────────────────────────────────────────────────── */
-function SphereGeo({ scale, material, isActive, label }: {
-  scale: number; material: THREE.MeshPhysicalMaterial; isActive: boolean; label: string;
+function SphereGeo({ scale, material, isActive, label, spawnIndex }: {
+  scale: number; material: THREE.MeshPhysicalMaterial; isActive: boolean; label: string; spawnIndex: number;
 }) {
   const body    = useRef<RapierRigidBody>(null);
   const impulse = useRef(new THREE.Vector3());
+  const spawned = useRef(false);
 
   useFrame((_s, delta) => {
-    if (!isActive || !body.current) return;
+    if (!body.current) return;
+
+    // Reset spawned flag when section leaves so re-entry re-animates
+    if (!isActive && spawned.current) {
+      spawned.current = false;
+      body.current.setTranslation({ x: 0, y: -40, z: 0 }, true);
+      body.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
+    }
+
+    // On first active frame, teleport ball below screen so it rises up naturally
+    if (isActive && !spawned.current) {
+      spawned.current = true;
+      // First 6 balls launch instantly, rest stagger at 35ms each
+      const delay = spawnIndex < 6 ? 0 : (spawnIndex - 6) * 35;
+      const launch = () => {
+        if (!body.current) return;
+        body.current.setTranslation(
+          { x: THREE.MathUtils.randFloatSpread(10), y: -14 - Math.random() * 4, z: THREE.MathUtils.randFloatSpread(4) - 2 },
+          true,
+        );
+        body.current.setLinvel(
+          { x: THREE.MathUtils.randFloatSpread(3), y: 14 + Math.random() * 6, z: 0 },
+          true,
+        );
+      };
+      if (delay === 0) launch();
+      else setTimeout(launch, delay);
+    }
+
+    if (!isActive) return;
     const d = Math.min(delta, 0.08);
     const p = body.current.translation();
     impulse.current.set(p.x, p.y, p.z).normalize().multiplyScalar(-40 * d * scale);
@@ -150,14 +180,11 @@ function SphereGeo({ scale, material, isActive, label }: {
   return (
     <RigidBody
       colliders={false}
-      linearDamping={0.78}
+      linearDamping={0.72}
       angularDamping={0.2}
       friction={0.18}
-      position={[
-        THREE.MathUtils.randFloatSpread(18),
-        THREE.MathUtils.randFloatSpread(16) - 14,
-        THREE.MathUtils.randFloatSpread(10) - 3,
-      ]}
+      // Park far off-screen until isActive triggers the staggered spawn
+      position={[0, -40, 0]}
       ref={body}
     >
       <BallCollider args={[scale]} />
@@ -229,9 +256,21 @@ export default function TechStack() {
     if (isMobile) return;
     const el = sectionRef.current;
     if (!el) return;
-    const obs = new IntersectionObserver(([e]) => setIsActive(e.isIntersecting), { threshold: 0.1 });
+    let timer: ReturnType<typeof setTimeout>;
+    const obs = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          // Small delay so the canvas finishes its first render before physics runs
+          timer = setTimeout(() => setIsActive(true), 120);
+        } else {
+          clearTimeout(timer);
+          setIsActive(false);
+        }
+      },
+      { threshold: 0.08 },
+    );
     obs.observe(el);
-    return () => obs.disconnect();
+    return () => { obs.disconnect(); clearTimeout(timer); };
   }, [isMobile]);
 
   useEffect(() => {
@@ -281,6 +320,7 @@ export default function TechStack() {
               material={materials[i]}
               isActive={isActive}
               label={item.label}
+              spawnIndex={i}
             />
           ))}
         </Physics>
