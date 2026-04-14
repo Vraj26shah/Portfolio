@@ -22,6 +22,7 @@ import { FaMedium } from "react-icons/fa6";
 // Lazy-loaded so the entire Three.js + Rapier + postprocessing bundle (~1.1 MB gz)
 // is split into a separate chunk and only fetched when the user scrolls near the Stack section.
 const TechStack = lazy(() => import("./components/TechStack"));
+import ParallaxBackground from "./components/ParallaxBackground";
 import "./App.css";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
@@ -357,6 +358,20 @@ export default function App() {
     return () => window.removeEventListener("scroll", update);
   }, []);
 
+  // Scroll progress bar — native listener so pinned GSAP sections never break it
+  useEffect(() => {
+    const bar = scrollBarRef.current;
+    if (!bar) return;
+    const onScroll = () => {
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (maxScroll <= 0) return;
+      bar.style.transform = `scaleX(${(window.scrollY / maxScroll).toFixed(4)})`;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll(); // initialise on mount
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   // Close mobile menu on resize to desktop
   useEffect(() => {
     const onResize = () => {
@@ -420,18 +435,9 @@ export default function App() {
 
       gsap.fromTo(".topbar", { autoAlpha: 0, y: -32 }, { autoAlpha: 1, y: 0, duration: 0.8, ease: "power3.out", delay: 0.12 });
 
-      // Scroll progress bar
-      ScrollTrigger.create({
-        trigger: contentRef.current,
-        start: "top top",
-        end: "bottom bottom",
-        onUpdate: (self) => {
-          if (scrollBarRef.current) {
-            // scaleX is compositor-thread only — no layout recalc on every scroll frame
-            scrollBarRef.current.style.transform = `scaleX(${self.progress.toFixed(4)})`;
-          }
-        },
-      });
+      // Scroll progress bar — intentionally left empty here.
+      // A separate useEffect below drives it with a native scroll listener,
+      // which is reliable even when GSAP pin sections inflate the scroll height.
 
       const featureCards = gsap.utils.toArray<HTMLElement>(".feature-card");
 
@@ -628,6 +634,9 @@ export default function App() {
 
   return (
     <div ref={appRef} className="app-shell is-ready">
+      {/* 3D parallax background — fixed, behind all content */}
+      <ParallaxBackground />
+
       {/* Cinematic loading screen */}
       {!loaded && (
         <div className={`loading-screen${loaderProgress >= 100 ? " is-done" : ""}`} aria-hidden="true">
