@@ -119,7 +119,8 @@ const projects: {
     tech: ["FastAPI", "React", "TypeScript", "Claude AI", "Docker", "SpacetimeDB", "JWT"],
     highlights: ["Planner and tool agents coordinated centrally", "Realtime task state and audits", "Security checks before execution"],
     link: "https://github.com/Vraj26shah/agentforge",
-    imageSrc: "/project-screenshot-04.png",
+    liveUrl: "https://agentforges.onrender.com/",
+    imageSrc: "/project-screenshot-02.png",
     imageAlt: "AgentForge project architecture screenshot",
   },
   {
@@ -143,7 +144,7 @@ const projects: {
     tech: ["Python", "Scapy", "Wireshark", "TCP/IP", "ARP", "Nmap"],
     highlights: ["Raw frame capture and parsing", "Spoof detection through ARP mismatch analysis", "Charts, logs, and pcap export from one CLI"],
     link: "https://github.com/Vraj26shah/NetworkAnalyzer",
-    imageSrc: "/project-screenshot-02.png",
+    imageSrc: "/project-screenshot-04.png",
     imageAlt: "Network Traffic Analyser project architecture screenshot",
   },
   {

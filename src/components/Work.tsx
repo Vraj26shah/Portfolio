@@ -75,10 +75,10 @@ const Work = () => {
               </div>
               <h4>Tools and features</h4>
               <p>FastAPI, React, TypeScript, Claude AI, Docker, SpacetimeDB, WebSocket, JWT</p>
-              <a href="https://agentforges.onrender.app" target="_blank" rel="noreferrer">agentforges.onrender.app ↗</a>
+              <a href="https://agentforges.onrender.com" target="_blank" rel="noreferrer">agentforges.onrender.com ↗</a>
             </div>
             <WorkImage
-              image="/project-screenshot-04.png"
+              image="/images/placeholder.webp"
               alt="AgentForge"
               link="https://github.com/Vraj26shah/agentforge"
             />
