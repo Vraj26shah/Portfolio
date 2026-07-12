@@ -120,12 +120,37 @@
   z-index: 2;
 }
 
+/* Text-shadow alone isn't reliable against the brightest parts of the
+   animated galaxy (its core and spiral arms can be near-white), so the
+   whole text column also sits on a soft dark scrim. It's an ellipse that
+   fades to nothing at the edges, so it reads as atmosphere, not a box,
+   but it guarantees contrast no matter what the galaxy is doing behind it. */
+.hero-copy::before {
+  content: "";
+  position: absolute;
+  inset: -2.5rem -3rem;
+  z-index: -1;
+  background: radial-gradient(
+    ellipse at 30% 40%,
+    rgba(2, 6, 14, 0.68) 0%,
+    rgba(2, 6, 14, 0.5) 40%,
+    rgba(2, 6, 14, 0.22) 70%,
+    transparent 90%
+  );
+  pointer-events: none;
+}
+
 .hero-kicker {
   margin: 0 0 1rem;
   color: var(--accent-cyan-soft);
   font-size: 0.78rem;
   letter-spacing: 0.26em;
   text-transform: uppercase;
+  /* The galaxy behind the hero moves and has bright patches — a plain
+     color washes out wherever a bright star field passes behind it, so
+     every hero text element carries a soft dark halo for guaranteed
+     contrast regardless of what's animating underneath. */
+  text-shadow: 0 2px 14px rgba(2, 6, 14, 0.92), 0 0 22px rgba(2, 6, 14, 0.65);
 }
 
 .hero-title {
@@ -139,6 +164,7 @@
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 4px 28px rgba(0, 0, 0, 0.55));
 }
 
 .hero-title__line {
@@ -148,9 +174,10 @@
 .hero-subtitle {
   max-width: 40rem;
   margin: 1.5rem 0 0;
-  color: var(--text-muted);
+  color: #eef5ff;
   font-size: clamp(1rem, 1.8vw, 1.16rem);
   line-height: 1.82;
+  text-shadow: 0 2px 16px rgba(2, 6, 14, 0.88), 0 0 26px rgba(2, 6, 14, 0.6);
 }
 
 .hero-actions,
@@ -408,7 +435,10 @@ main {
 
 .social-rail {
   position: fixed;
-  left: max(0.85rem, calc((100vw - 1220px) / 2 - 5.35rem));
+  /* Only ever renders once the viewport gutter beside the centered 1220px
+     content column is wide enough to hold the rail without overlapping it
+     (see the 1450px media query below) — so this calc never needs a clamp. */
+  left: calc((100vw - 1220px) / 2 - 5.35rem);
   top: 50%;
   bottom: auto;
   transform: translateY(-50%);
@@ -480,7 +510,6 @@ main {
 }
 
 /* ─── Sections ────────────────────────────────────────────────────────────── */
-.showcase-shell,
 .section-shell,
 .contact-section {
   position: relative;
@@ -495,8 +524,7 @@ main {
 }
 
 .section-heading h2,
-.contact-card h2,
-.showcase-copy h2 {
+.contact-card h2 {
   margin: 0;
   font-family: var(--font-display);
   font-weight: 700;
@@ -592,11 +620,35 @@ main {
 }
 
 .glass-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(255, 255, 255, 0.16);
+  transform: translateY(-4px);
+  border-color: rgba(123, 220, 255, 0.28);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 36px 78px rgba(0, 0, 0, 0.36);
+    0 36px 78px rgba(0, 0, 0, 0.36),
+    0 0 0 1px rgba(123, 220, 255, 0.08);
+}
+
+/* Cursor-tracking spotlight — same --mx/--my technique as .button, so cards
+   read as responsive surfaces rather than static boxes. Cards with their own
+   ::before (service-card, contact-card) keep their existing effect instead. */
+.glass-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0;
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(123, 220, 255, 0.14), transparent 60%);
+  transition: opacity 400ms ease;
+  pointer-events: none;
+}
+
+.glass-card:hover::before {
+  opacity: 1;
+}
+
+.glass-card > * {
+  position: relative;
+  z-index: 1;
 }
 
 .story-note strong {
@@ -608,7 +660,6 @@ main {
 
 .story-note p,
 .service-card p,
-.feature-card p,
 .timeline-step p,
 .project-card__body p,
 .contact-card p {
@@ -617,7 +668,6 @@ main {
   font-size: 0.96rem;
 }
 
-.feature-card,
 .story-lead,
 .story-note,
 .service-card,
@@ -628,53 +678,11 @@ main {
   border-radius: 1.6rem;
 }
 
-.feature-card strong {
-  font-size: 1.05rem;
-  line-height: 1.62;
-}
-
-/* ─── Showcase / Pinned Feature Section ───────────────────────────────────── */
-.showcase-shell {
-  min-height: 100vh;
-  /* scroll-margin-top pushes the section anchor below the fixed navbar */
-  scroll-margin-top: 5rem;
-}
-
-.showcase-frame {
-  display: grid;
-  grid-template-columns: minmax(0, 0.84fr) minmax(22rem, 1fr);
-  gap: 3rem;
-  align-items: start;
-  min-height: 100vh;
-  /* top padding = navbar height (~5rem) + breathing room */
-  padding: 9rem 0 8rem;
-}
-
-.showcase-copy {
-  padding-top: 5rem;
-  position: relative;
-  z-index: 2;
-}
-
-.showcase-copy h2,
 .section-heading h2,
 .contact-card h2 {
   font-size: clamp(2.5rem, 6vw, 4.8rem);
 }
 
-.feature-stack {
-  position: relative;
-  min-height: 30rem;
-}
-
-.feature-card {
-  position: absolute;
-  inset: auto 0 0 auto;
-  width: min(32rem, 100%);
-  padding: 1.8rem;
-}
-
-.feature-card__index,
 .project-card__index,
 .timeline-step__id {
   display: inline-block;
@@ -685,7 +693,6 @@ main {
   letter-spacing: 0.2em;
 }
 
-.feature-card h3,
 .service-card h3,
 .project-card h3,
 .timeline-step h3 {
@@ -695,7 +702,6 @@ main {
   line-height: 1.12;
 }
 
-.feature-card p:last-child,
 .service-card p,
 .project-card__body p,
 .timeline-step p {
@@ -761,10 +767,101 @@ main {
   gap: 1.2rem;
 }
 
+/* ─── Experience Section ──────────────────────────────────────────────────── */
+.experience-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin-top: 2.5rem;
+  align-items: stretch;
+}
+
+.experience-card {
+  padding: 1.7rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.experience-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.experience-card__header h3 {
+  margin: 0 0 0.3rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  line-height: 1.15;
+}
+
+.experience-card__org {
+  color: rgba(123, 220, 255, 0.85);
+  font-size: 0.86rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.experience-card__dates {
+  flex-shrink: 0;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(220, 235, 255, 0.7);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.experience-card__summary {
+  margin: 1rem 0 0;
+  color: rgba(220, 235, 255, 0.8);
+  font-size: 0.94rem;
+  line-height: 1.65;
+  font-style: italic;
+}
+
+.experience-card__bullets {
+  display: grid;
+  gap: 0.7rem;
+  margin: 1.1rem 0 0;
+  padding: 1.1rem 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  list-style: none;
+}
+
+.experience-card__bullets li {
+  position: relative;
+  padding-left: 1.1rem;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.68;
+}
+
+.experience-card__bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55rem;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 999px;
+  background: #7bdcff;
+}
+
+@media (max-width: 1120px) {
+  .experience-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ─── Services ────────────────────────────────────────────────────────────── */
 .services-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1.25rem;
   margin-top: 2.5rem;
   align-items: stretch;
@@ -922,18 +1019,18 @@ main {
 }
 
 .arch-slide.is-upcoming {
-  transform: translateY(100%);
+  transform: translateX(100%);
   opacity: 0;
   pointer-events: none;
 }
 
 .arch-slide.is-active {
-  transform: translateY(0);
+  transform: translateX(0);
   opacity: 1;
 }
 
 .arch-slide.is-past {
-  transform: translateY(-100%);
+  transform: translateX(-100%);
   opacity: 0;
   pointer-events: none;
 }
@@ -1195,18 +1292,18 @@ main {
 }
 
 .project-card-slide.is-upcoming {
-  transform: translateY(100%);
+  transform: translateX(100%);
   opacity: 0;
   pointer-events: none;
 }
 
 .project-card-slide.is-active {
-  transform: translateY(0);
+  transform: translateX(0);
   opacity: 1;
 }
 
 .project-card-slide.is-past {
-  transform: translateY(-100%);
+  transform: translateX(-100%);
   opacity: 0;
   pointer-events: none;
 }
@@ -1476,6 +1573,35 @@ main {
   text-decoration: none;
 }
 
+.resume-certs {
+  margin-top: 1.5rem;
+  padding-top: 1.3rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.resume-certs .resume-copy__label {
+  display: block;
+  margin-bottom: 0.7rem;
+}
+
+.resume-certs__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.resume-certs__list li {
+  padding: 0.42rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(222, 236, 255, 0.78);
+  font-size: 0.78rem;
+  background: rgba(255, 255, 255, 0.03);
+}
+
 /* ─── Tech Stack ──────────────────────────────────────────────────────────── */
 .techstack-shell {
   padding: 0;
@@ -1506,7 +1632,7 @@ main {
   gap: 1.5rem;
 }
 
-/* shared ghost title — used by both desktop (.techstack-moncy) and mobile (.techstack-static) */
+/* Shared ghost title used by both desktop and mobile technology sections. */
 .techstack-static .techstack-ghost-title {
   font-size: clamp(3rem, 11vw, 5rem);
 }
@@ -1565,7 +1691,7 @@ main {
   flex-shrink: 0;
 }
 
-.techstack-moncy {
+.techstack-stage {
   position: relative;
   width: 100vw;
   margin-left: calc(50% - 50vw);
@@ -1578,15 +1704,15 @@ main {
   isolation: isolate;
 }
 
-.techstack-moncy::before,
-.techstack-moncy::after {
+.techstack-stage::before,
+.techstack-stage::after {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
 }
 
-.techstack-moncy::before {
+.techstack-stage::before {
   background:
     radial-gradient(circle at center, rgba(255, 255, 255, 0.045), transparent 26%),
     linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
@@ -1596,7 +1722,7 @@ main {
   opacity: 0.16;
 }
 
-.techstack-moncy::after {
+.techstack-stage::after {
   background:
     radial-gradient(circle at center, transparent 34%, rgba(0, 0, 0, 0.14) 72%, rgba(0, 0, 0, 0.72) 100%);
   z-index: 1;
@@ -1619,7 +1745,7 @@ main {
   z-index: 0;
 }
 
-.tech-canvas-moncy {
+.tech-canvas-stage {
   position: absolute !important;
   inset: 0 !important;
   width: 100% !important;
@@ -1722,6 +1848,9 @@ main {
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
   gap: 1.4rem;
+  /* start, not stretch — the preview pane is now much taller so it can show
+     the whole resume without scrolling; stretching resume-copy to match
+     would leave a large empty gap under its (much shorter) content. */
   align-items: stretch;
   margin-top: 2.5rem;
 }
@@ -1768,7 +1897,12 @@ main {
 .resume-preview {
   display: grid;
   place-items: center;
-  min-height: 38rem;
+  /* Google's embedded PDF viewer doesn't reliably forward mouse-wheel
+     scroll to its own document — a scroll gesture over the iframe was
+     scrolling the outer page instead, so the resume looked "stuck" with
+     the bottom of the page unreachable. Rather than depend on a
+     third-party iframe's internal scroll behaviour, the viewport is just
+     made tall enough to show the whole one-page resume at once. */
   padding: 0;
   overflow: hidden;
   position: relative;
@@ -1780,7 +1914,8 @@ main {
 
 .resume-preview__iframe {
   width: 100%;
-  height: 38rem;
+  height: 100%;
+  min-height: 0;
   border: none;
   display: block;
   border-radius: inherit;
@@ -1892,71 +2027,17 @@ main {
   font-size: 0.95rem;
 }
 
-.footer-badge__start {
-  display: grid;
-  gap: 0.8rem;
-  margin-top: 0.55rem;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.footer-badge__start span {
-  color: rgba(220, 235, 255, 0.62);
-  font-size: 0.75rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-}
-
-.footer-badge__start-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.85rem;
-}
-
-.footer-badge__start-links a {
-  padding: 0.55rem 0.9rem;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: rgba(241, 246, 255, 0.84);
-  font-size: 0.84rem;
-  letter-spacing: 0.04em;
-  background: rgba(255, 255, 255, 0.03);
-  transition: border-color 220ms ease, background-color 220ms ease, color 220ms ease;
-}
-
-.footer-badge__start-links a:hover {
-  color: var(--text-primary);
-  border-color: rgba(123, 220, 255, 0.18);
-  background: rgba(123, 220, 255, 0.07);
-}
-
 .footer-badge__actions {
   display: grid;
   justify-items: end;
   gap: 1.15rem;
 }
 
-.footer-badge__nav {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 0.85rem;
-}
-
-.footer-badge__nav a,
 .footer-badge__meta span {
   color: rgba(220, 235, 255, 0.68);
   font-size: 0.8rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-}
-
-.footer-badge__nav a {
-  transition: color 220ms ease;
-}
-
-.footer-badge__nav a:hover {
-  color: var(--text-primary);
 }
 
 .footer-badge__social {
@@ -2102,6 +2183,17 @@ main {
   color: var(--accent-cyan);
 }
 
+/* Below this width the left gutter beside the centered content column is too
+   narrow for the rail — it would overlap the hero title / nav. Most common
+   laptop resolutions (1280/1366/1440) fall under this, so the rail only
+   shows on genuinely wide desktop viewports; social links remain reachable
+   via the footer and (below 1120px) the mobile nav drawer. */
+@media (max-width: 1450px) {
+  .social-rail {
+    display: none;
+  }
+}
+
 /* ═══════════════════════════════════════════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════════════════════════════════════════ */
@@ -2119,7 +2211,6 @@ main {
   }
 
   .hero-section,
-  .showcase-frame,
   .story-grid {
     grid-template-columns: 1fr;
   }
@@ -2142,10 +2233,6 @@ main {
     max-width: 100%;
   }
 
-  .feature-stack {
-    min-height: 24rem;
-  }
-
   .services-grid {
     grid-template-columns: 1fr;
   }
@@ -2166,7 +2253,7 @@ main {
     grid-template-columns: 1fr;
   }
 
-  .techstack-moncy {
+  .techstack-stage {
     height: clamp(28rem, 70vh, 46rem);
   }
 
@@ -2184,11 +2271,6 @@ main {
     top: 0.75rem;
     width: calc(100% - 1rem);
     padding: 0.8rem 0.9rem;
-  }
-
-  /* Social rail: hide the fixed side rail on mobile — nav drawer has social links */
-  .social-rail {
-    display: none;
   }
 
   .hero-section {
@@ -2240,39 +2322,6 @@ main {
     grid-template-columns: 1fr 1fr;
   }
 
-  /* Showcase section — no pin on mobile, just static layout */
-  .showcase-shell {
-    min-height: auto;
-  }
-
-  .showcase-frame {
-    grid-template-columns: 1fr;
-    padding: 7rem 0 3rem;
-  }
-
-  .showcase-copy {
-    padding-top: 0;
-  }
-
-  /* Feature cards: static on mobile (GSAP pin disabled) */
-  .feature-stack {
-    position: relative;
-    min-height: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .feature-card {
-    position: relative !important;
-    inset: auto !important;
-    width: 100% !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: none !important;
-    filter: none !important;
-  }
-
   .section-shell {
     padding: 4rem 0;
   }
@@ -2290,21 +2339,18 @@ main {
     padding: 0 1rem 1.5rem;
   }
 
-  .work-viewport {
-    overflow-x: auto;
-    overflow-y: visible;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* On mobile, work-split stacks vertically and panels become scrollable cards */
+  /* Arch pane and cards pane stack vertically on mobile; each pane is its
+     own horizontal swipe carousel (see .work-arch-stack / .work-cards-stack
+     below) so users scroll the page normally between panes and swipe
+     sideways within a pane, mirroring the desktop split view at this width. */
   .work-split {
+    display: flex;
+    flex-direction: column;
     grid-template-columns: 1fr;
-    flex: none;
+    gap: 1.5rem;
     height: auto;
-    gap: 1rem;
   }
 
-  /* Panels become fixed-height on mobile for easy horizontal scrolling */
   .work-pane {
     height: auto;
   }
@@ -2314,14 +2360,21 @@ main {
     overflow: visible;
   }
 
-  /* Stacks become flex rows for swipe on mobile */
+  /* Horizontal swipe carousel, matching the desktop pane-by-pane feel —
+     touch-action: pan-x is the fix: it tells the browser this element only
+     claims horizontal touch gestures, so a vertical swipe that starts over
+     it still scrolls the page instead of getting trapped in the carousel
+     (the previous bug: scroll-snap-x with no touch-action hint captured
+     every touch, including ones meant to scroll past the section). */
   .work-arch-stack,
   .work-cards-stack {
     position: relative;
     display: flex;
     flex-direction: row;
     overflow-x: auto;
+    overflow-y: hidden;
     scroll-snap-type: x mandatory;
+    touch-action: pan-x;
     -webkit-overflow-scrolling: touch;
     gap: 1rem;
     padding: 0 1rem 0.5rem;
@@ -2419,8 +2472,7 @@ main {
   .timeline-step,
   .resume-copy,
   .resume-preview,
-  .contact-card,
-  .feature-card {
+  .contact-card {
     padding: 1.3rem;
     border-radius: 1.3rem;
   }
@@ -2431,7 +2483,6 @@ main {
     justify-items: start;
   }
 
-  .footer-badge__nav,
   .footer-badge__social {
     justify-content: flex-start;
   }
@@ -2454,12 +2505,11 @@ main {
 
 @media (max-width: 480px) {
   .section-heading h2,
-  .showcase-copy h2,
   .contact-card h2 {
     font-size: clamp(1.8rem, 7vw, 2.8rem);
   }
 
-  .techstack-moncy {
+  .techstack-stage {
     height: clamp(24rem, 60vh, 36rem);
   }
 

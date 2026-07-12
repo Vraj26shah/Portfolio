@@ -1,65 +1,61 @@
-# My Portfolio Website - Overview 🚀
+# Vraj Shah — Portfolio
 
-This repository contains the open-source version of my personal portfolio website.  
-Feel free to explore the code and use it for learning and inspiration.
+The personal portfolio of Vraj Shah, a computer science student and full-stack, cloud, DevOps, and security-focused developer. It presents selected projects, experience, research, certifications, and contact links in an interactive single-page experience.
 
----
+## Highlights
 
-## ⚠️ Usage Notice
+- Project case studies for ScholarStack, MediGuard, a secure workflow platform, a DevOps engineering lab, network traffic analysis, mentorship research, and a timetable maker
+- Experience at Inspira and as the founder of ScholarStack
+- Interactive 3D technology stack built with React Three Fiber, Drei, Three.js, and Rapier
+- GSAP-powered scrolling, reveals, pinned project storytelling, and responsive navigation
+- Resume preview, research-paper links, certifications, and social/contact links
+- Responsive layouts, reduced-motion support, and mobile-friendly interaction patterns
 
-This project is shared for learning purposes only.
+## Tech stack
 
-Please do NOT:
-- Clone or replicate the full website or design
-- Repost it with minor content changes
-- Use this project for commercial/client work
-- Create tutorials or content using this exact project
+- React 18 and TypeScript
+- Vite
+- GSAP and ScrollTrigger
+- Three.js, React Three Fiber, Drei, and Rapier
+- React Icons and modern CSS
 
-If you use parts of the code, you must provide proper credit linking back to the original repository.
+## Run locally
 
-Build your own version — don’t just copy.
+Prerequisites: Node.js 18 or later and npm.
 
-— Moncy Yohannan
+```bash
+npm install
+npm run dev
+```
 
----
+Open the local URL printed by Vite. The development server is exposed to the local network by default.
 
-## 🛠️ Instructions
+## Available scripts
 
-I have modified the GSAP Club plugins using trial versions.  
-⚠️ Note: Trial plugins cannot be used for production or hosting.
+```bash
+npm run dev      # start the Vite development server
+npm run build    # type-check and create a production build
+npm run lint     # run ESLint
+npm run preview  # preview the production build
+```
 
-For official GSAP Club plugins, refer here:  
-https://gsap.com/docs/v3/Installation/
+## Project structure
 
----
+```text
+src/
+  App.tsx                 # page content, sections, and interactions
+  App.css                 # portfolio layout and responsive styling
+  components/
+    TechStack.tsx         # lazy-loaded interactive 3D technology section
+    ParallaxBackground.tsx
+public/
+  project-screenshot-*    # project imagery and diagrams
+```
 
-## ⚙️ Tech Stack
+## Customising content
 
-React • TypeScript • GSAP • Three.js • WebGL • HTML • CSS • JavaScript
+The portfolio content is kept in `src/App.tsx`. Update the project, experience, certification, research-paper, and social-link data there. Project screenshots live in `public/`. The resume button and embedded preview use Google Drive links; replace both links together when publishing a new resume.
 
----
+## License
 
-## 🎨 Assets Usage
-
-Some 3D assets included in this repository are free to use for learning purposes.
-
-However:
-
-- The original 3D avatar used on my live portfolio is NOT included in this repository
-- That avatar is a custom asset created over ~1 month
-- It is not open source and not available for reuse
-
-Any usage, extraction, or redistribution of that avatar from my live website is strictly prohibited.
-
----
-
-![Protfolio-Preview](https://github.com/user-attachments/assets/3c4557e7-6392-4928-b8a9-7b2476ef4edd)
-
----
-
-## 📄 License
-
-This project is licensed under the Personal Portfolio License (PPL) v1.0.
-
-See the LICENSE file for full details
-
+This repository is licensed under the [Personal Portfolio License](LICENSE). Please review it before reusing the code or assets.

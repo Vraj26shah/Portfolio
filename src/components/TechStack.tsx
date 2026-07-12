@@ -36,6 +36,8 @@ const techItems: TechItem[] = [
   { label: "OWASP",          logo: "https://cdn.simpleicons.org/owasp/00549E",                                                    dark: false, accent: "#00549E" },
   { label: "Nmap",           logo: "https://cdn.simpleicons.org/nmap/4CBB17",                                                     dark: true,  accent: "#4CBB17" },
   { label: "VS Code",        logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg",               dark: false, accent: "#007ACC" },
+  { label: "Flutter",        logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg",             dark: false, accent: "#02569B" },
+  { label: "FastAPI",        logo: "https://cdn.simpleicons.org/fastapi/009688",                                                  dark: false, accent: "#009688" },
 ];
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -285,7 +287,7 @@ export default function TechStack() {
 
   // ── Desktop: full 3D physics canvas ──
   return (
-    <div className="techstack-moncy" ref={sectionRef}>
+    <div className="techstack-stage" ref={sectionRef}>
       <div className="techstack-ghost-title" aria-hidden="true">MY TECH STACK</div>
 
       <Canvas
@@ -302,7 +304,7 @@ export default function TechStack() {
         performance={{ min: 0.5 }}
         camera={{ position: [0, 0, 20], fov: 32, near: 1, far: 100 }}
         onCreated={(s) => { s.gl.toneMappingExposure = 1.3; }}
-        className="tech-canvas-moncy"
+        className="tech-canvas-stage"
       >
         {/* Lights — compensate for removed Environment HDR with slightly stronger values */}
         <ambientLight intensity={1.6} />

@@ -4,15 +4,14 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   FiArrowRight,
-  FiArrowDownRight,
   FiArrowUpRight,
   FiCode,
-  FiCommand,
   FiCloud,
   FiCpu,
   FiFileText,
   FiGithub,
   FiInstagram,
+  FiLayers,
   FiLinkedin,
   FiMail,
   FiMaximize2,
@@ -29,10 +28,11 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const navLinks = [
   { label: "Home", href: "#home" },
-  { label: "Story", href: "#story" },
-  { label: "Craft", href: "#craft" },
   { label: "Work", href: "#work" },
   { label: "Stack", href: "#stack" },
+  { label: "Story", href: "#story" },
+  { label: "Experience", href: "#experience" },
+  { label: "Craft", href: "#craft" },
   { label: "Process", href: "#process" },
   { label: "Resume", href: "#resume" },
   { label: "Contact", href: "#contact" },
@@ -45,42 +45,57 @@ const socialLinks = [
   { label: "Instagram", href: "https://www.instagram.com/vraj10s?igsh=a2Q2YXVnaXZsYmVn", icon: FiInstagram },
 ];
 
-const featurePanels = [
-  {
-    id: "01",
-    eyebrow: "Production at 20",
-    title: "ScholarStack: ₹10,000+/month, 500+ concurrent users, zero external IT.",
-    text: "Built, deployed, and operated a live Linux platform end-to-end — DNS, SSL, Nginx, Python automation, and cron pipelines — with 99%+ uptime and no third-party IT support.",
-  },
-  {
-    id: "02",
-    eyebrow: "Full-Stack Systems",
-    title: "Linux to AWS to frontend — one engineer owning the full build.",
-    text: "Ubuntu server administration, Docker CI/CD, Prometheus + Grafana monitoring on EC2, TCP/IP packet analysis, and React frontends — all genuine production work, not toy projects.",
-  },
-  {
-    id: "03",
-    eyebrow: "Research-Backed",
-    title: "Two peer-reviewed papers and 40+ published technical articles.",
-    text: "Co-authored research on ALU power optimisation and an intelligent mentorship matching algorithm — both peer-reviewed. Active Linux and networking blogger on Medium with 40+ long-form articles.",
-  },
-];
-
 const services = [
+  {
+    icon: FiLayers,
+    title: "CS Fundamentals",
+    text: "Data structures, algorithms, OOP, databases, and operating systems — the fundamentals that make everything else on this page possible.",
+  },
   {
     icon: FiCloud,
     title: "Cloud & DevOps",
-    text: "Docker, GitHub Actions CI/CD, Prometheus + Grafana observability, AWS EC2 provisioning via cloud-init, Bash automation, S3 backups, and SSH-hardened infrastructure — I own the full delivery pipeline.",
+    text: "I run the full delivery pipeline myself: Docker containers, GitHub Actions for CI/CD, Prometheus and Grafana for monitoring, and AWS EC2 instances I provision and harden by hand.",
   },
   {
     icon: FiCpu,
     title: "Linux, Networking & Security",
-    text: "Daily Ubuntu/Fedora driver, RHCSA-aligned systems knowledge, Scapy-based packet analysis, TCP/IP and ARP anomaly detection, Nmap reconnaissance, and active TryHackMe CTF work.",
+    text: "Linux is my daily driver, not just a project skill — Ubuntu and Fedora, RHCSA-level systems knowledge, packet analysis with Scapy, reconnaissance with Nmap, and regular practice on TryHackMe.",
   },
   {
     icon: FiCode,
-    title: "Full-Stack Development",
-    text: "React + TypeScript frontends, Node.js and FastAPI backends, RESTful API design, and end-to-end integration — with Python and Bash scripting tying the automation layer together.",
+    title: "Full-Stack & Mobile",
+    text: "I build both sides of the stack — React and Flutter on the frontend, FastAPI or Node.js on the backend, tied together with JWT-secured APIs. Proven on production code during my internship, not just side projects.",
+  },
+];
+
+const experience: {
+  role: string;
+  org: string;
+  dates: string;
+  summary: string;
+  bullets: string[];
+}[] = [
+  {
+    role: "SDE Intern",
+    org: "Inspira",
+    dates: "2026 · 6 Weeks",
+    summary: "During my six weeks at Inspira, I shipped real production code — a Flutter mobile app, secure authentication, and backend APIs that are live today.",
+    bullets: [
+      "Built the Flutter frontend from scratch, including a reusable design-token system so every screen stayed pixel-accurate and consistent.",
+      "Implemented JWT authentication end-to-end — initialising tokens, storing them securely, and handling refresh so sessions never broke.",
+      "Extended the existing FastAPI backend with new chart-data endpoints that power the analytics dashboard.",
+    ],
+  },
+  {
+    role: "Founder & Full-Stack Developer",
+    org: "ScholarStack",
+    dates: "Sep 2023 – Present",
+    summary: "I built this alone and I'm still running it today — a live platform that generates real revenue, not a class project.",
+    bullets: [
+      "Holds 99%+ uptime for 500+ concurrent users and brings in ₹10,000+ every month, with no outside IT support.",
+      "Automated content delivery with Python and Bash scripts, which got 95% of users on board within two weeks of launch.",
+      "I handle the entire production lifecycle myself — reverse proxy configuration, SSL certificates, DNS, and every deployment.",
+    ],
   },
 ];
 
@@ -101,8 +116,8 @@ const projects: {
     index: "01",
     category: "Academic Resource Platform",
     title: "ScholarStack",
-    description: "Linux-hosted academic resource platform sustaining 99%+ uptime for 500+ concurrent users and generating ₹10,000+ monthly revenue with zero external IT support.",
-    insight: "Built and operated end-to-end, from DNS configuration and SSL certificates to reverse proxying and automation on a bare Linux server.",
+    description: "An academic resource platform I host on Linux myself. It holds 99%+ uptime for 500+ concurrent users and brings in ₹10,000+ a month, with no external IT team behind it.",
+    insight: "I set up and still run every piece myself — DNS, SSL, the reverse proxy, and automation, all on a bare Linux server I manage directly.",
     tech: ["Linux", "Nginx", "Python", "Bash", "Certbot", "DNS", "Cron Jobs"],
     highlights: ["Runs on a self-managed Linux setup", "Student-focused delivery flow", "Stable operations with zero external IT support"],
     link: "https://github.com/Vraj26shah/vitbsmashers",
@@ -112,11 +127,11 @@ const projects: {
   },
   {
     index: "02",
-    category: "AI Agent Orchestration",
+    category: "Secure Workflow Orchestration",
     title: "AgentForge",
-    description: "Full-stack AI agent orchestration platform with ArmorIQ security, signed intent tokens, real-time policy enforcement, and multi-agent task execution.",
-    insight: "Four specialised agents coordinate through a controlled orchestration layer with complete auditability and fail-closed verification.",
-    tech: ["FastAPI", "React", "TypeScript", "Claude AI", "Docker", "SpacetimeDB", "JWT"],
+    description: "A secure workflow platform using signed intent tokens and real-time policy checks so multiple services can operate safely and transparently.",
+    insight: "Four specialised agents work through a single orchestration layer that logs everything and fails safely the moment something looks wrong.",
+    tech: ["FastAPI", "React", "TypeScript", "Docker", "SpacetimeDB", "JWT"],
     highlights: ["Planner and tool agents coordinated centrally", "Realtime task state and audits", "Security checks before execution"],
     link: "https://github.com/Vraj26shah/agentforge",
     liveUrl: "https://agentforges.onrender.com/",
@@ -127,8 +142,8 @@ const projects: {
     index: "03",
     category: "Infrastructure & CI/CD",
     title: "DevOps Engineering Lab",
-    description: "Production-grade CI/CD pipelines, Docker containers, Prometheus and Grafana monitoring stacks on AWS EC2 with automated deployment and alerting.",
-    insight: "This project is about making systems repeatable, observable, and easier to operate over time through delivery automation and monitoring.",
+    description: "A full CI/CD pipeline on AWS EC2, using Docker for containers and Prometheus with Grafana for monitoring, so deployments and alerts happen automatically.",
+    insight: "Built to prove a point: good delivery automation makes systems repeatable and easy to observe, not just faster to ship.",
     tech: ["Docker", "GitHub Actions", "Prometheus", "Grafana", "AWS EC2", "Bash"],
     highlights: ["CI build and publish workflow", "Monitoring stack on EC2", "Metrics, dashboards, and alerts in one flow"],
     link: "https://github.com/Vraj26shah/Devops-aws-",
@@ -139,8 +154,8 @@ const projects: {
     index: "04",
     category: "Security & Networking",
     title: "Network Traffic Analyser",
-    description: "Analyses network packets to detect anomalies and identify IP/MAC spoofing, traces attacker addresses, and visualises protocol breakdowns with Pandas and Matplotlib.",
-    insight: "This project shows packet-level thinking clearly, from capture and parsing to spoof detection and exportable investigation outputs.",
+    description: "Captures live network traffic to catch anomalies and IP or MAC spoofing, trace where an attack is coming from, and chart the protocol breakdown with Pandas and Matplotlib.",
+    insight: "This is where I show packet-level thinking — capturing raw frames, parsing them, spotting anomalies, and exporting findings you can actually act on.",
     tech: ["Python", "Scapy", "Wireshark", "TCP/IP", "ARP", "Nmap"],
     highlights: ["Raw frame capture and parsing", "Spoof detection through ARP mismatch analysis", "Charts, logs, and pcap export from one CLI"],
     link: "https://github.com/Vraj26shah/NetworkAnalyzer",
@@ -151,8 +166,8 @@ const projects: {
     index: "05",
     category: "Research & Machine Learning",
     title: "Mentorship Algorithm",
-    description: "Research-led build exploring recommendation logic, data profiling, and decision pathways for better mentorship matching using genetic programming.",
-    insight: "It highlights how I frame analytical problems when the solution needs stronger data logic and decision modelling rather than only frontend polish.",
+    description: "A mentor-matching engine that uses decision trees and genetic programming to recommend the right pairing, built out of a research paper I co-authored.",
+    insight: "This one is about the reasoning underneath, not the interface — how the matching logic actually decides who gets paired with whom.",
     tech: ["Decision Trees", "Genetic Programming", "Python", "Data Profiling"],
     highlights: ["Research-driven recommendation logic", "Structured profiling and matching flow", "Decision-focused architecture thinking"],
     link: "https://github.com/Vraj26shah/fathersadvice_final",
@@ -164,8 +179,8 @@ const projects: {
     index: "06",
     category: "Full-Stack Healthcare App",
     title: "MediGuard",
-    description: "Full-stack healthcare web application with separate backend and frontend, RESTful API design, and structured configuration management.",
-    insight: "Demonstrates full ownership of both the backend logic and the frontend experience in a real-world application context.",
+    description: "A full-stack healthcare app with a clean split between backend and frontend, connected through a properly designed REST API.",
+    insight: "Built to show I can own a real app end-to-end — the backend logic and the frontend experience both fall on me.",
     tech: ["Node.js", "React", "JavaScript", "REST API", "MongoDB"],
     highlights: ["Separate patient and provider flows", "Role-aware frontend and API design", "Structured backend and data handling"],
     link: "https://github.com/Vraj26shah/mediguard",
@@ -176,8 +191,8 @@ const projects: {
     index: "07",
     category: "Web Scheduling Tool",
     title: "Timetable Maker",
-    description: "Lightweight browser-based timetable creation tool with no backend dependencies, designed to be fast, responsive, and easy to use.",
-    insight: "A focused single-page tool that shows I can ship something clean and usable without overengineering the solution.",
+    description: "A lightweight, browser-only tool for building timetables — no backend required, just fast and responsive by design.",
+    insight: "Sometimes the right call is to keep it simple — this one proves I know when not to overengineer a solution.",
     tech: ["JavaScript", "HTML", "CSS", "Responsive Design", "Vercel"],
     highlights: ["Frontend-only workflow", "Fast scheduling interactions", "Simple tool built for direct usability"],
     link: "https://github.com/Vraj26shah/timetablemaker",
@@ -185,6 +200,14 @@ const projects: {
     imageSrc: "/project-screenshot-timetable.svg",
     imageAlt: "Timetable Maker project architecture diagram",
   },
+];
+
+const certifications = [
+  "Google IT Support — Coursera",
+  "Networking Essentials — Coursera",
+  "AI/ML Fundamentals — Vityarthi",
+  "Python Programming Mastery — Vityarthi",
+  "C Programming — Fortune Education",
 ];
 
 const researchPapers = [
@@ -202,27 +225,27 @@ const processSteps = [
   {
     id: "01",
     title: "Understand the problem",
-    text: "Before touching any code I map out what needs to be built, why it matters, and what the failure modes are. Clear scope stops me from building the wrong thing cleanly.",
+    text: "Before I write a single line of code, I map out exactly what needs to be built and where it's most likely to break.",
   },
   {
     id: "02",
     title: "Design the architecture",
-    text: "I sketch the system design first — services, data flow, network boundaries, and where the complexity lives. Good architecture decisions are cheaper before the code than after.",
+    text: "I sketch out the services, the data flow, and where the complexity should live first — architecture decisions are far cheaper to change on paper than in code.",
   },
   {
     id: "03",
     title: "Build iteratively",
-    text: "I work layer by layer: get the core path running, verify it works, then add features. Each iteration is tested against real inputs, not assumptions.",
+    text: "I get the core path working first, then layer on features one at a time. Every change is tested against real inputs before it ships.",
   },
   {
     id: "04",
     title: "Automate delivery",
-    text: "CI/CD pipelines, container builds, and environment config are set up early. Shipping should be a non-event, not a scramble. Monitoring and alerting go in before production traffic does.",
+    text: "CI/CD, containers, and monitoring all go in early, so by the time something ships, it's a non-event instead of a scramble.",
   },
   {
     id: "05",
     title: "Operate and improve",
-    text: "Post-ship I watch metrics, read logs, and act on signals. A build is not done when it deploys — it is done when I understand how it behaves under real load and edge cases.",
+    text: "After launch, I watch the metrics and read the logs myself. A build isn't done when it deploys — it's done once I know how it behaves under real load.",
   },
 ];
 
@@ -334,7 +357,7 @@ export default function App() {
   // Uses a scroll listener + getBoundingClientRect so it works correctly with GSAP-pinned
   // sections (showcase pin, work pin) where ScrollTrigger trigger positions are unreliable.
   useEffect(() => {
-    const ids = ["home", "story", "craft", "work", "stack", "process", "resume", "contact"];
+    const ids = ["home", "work", "stack", "story", "experience", "craft", "process", "resume", "contact"];
     const THRESHOLD = 120; // px from viewport top (sits just below the fixed navbar)
 
     const update = () => {
@@ -393,19 +416,21 @@ export default function App() {
     document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // Button hover spotlight effect
+  // Mouse-tracking spotlight — buttons and cards both use a --mx/--my
+  // driven radial-gradient (see .button::before / .glass-card::before)
+  // so cards feel responsive to the cursor instead of static boxes.
   useEffect(() => {
-    const buttons = document.querySelectorAll<HTMLElement>(".button");
-    const handleButtonMove = (e: MouseEvent) => {
+    const targets = document.querySelectorAll<HTMLElement>(".button, .glass-card");
+    const handleMove = (e: MouseEvent) => {
       const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
       const x = ((e.clientX - rect.left) / rect.width) * 100;
       const y = ((e.clientY - rect.top) / rect.height) * 100;
       (e.currentTarget as HTMLElement).style.setProperty("--mx", `${x}%`);
       (e.currentTarget as HTMLElement).style.setProperty("--my", `${y}%`);
     };
-    buttons.forEach((btn) => btn.addEventListener("mousemove", handleButtonMove as EventListener));
+    targets.forEach((el) => el.addEventListener("mousemove", handleMove as EventListener));
     return () => {
-      buttons.forEach((btn) => btn.removeEventListener("mousemove", handleButtonMove as EventListener));
+      targets.forEach((el) => el.removeEventListener("mousemove", handleMove as EventListener));
     };
   }, [isReady]);
 
@@ -423,55 +448,11 @@ export default function App() {
         return;
       }
 
-      const isMobile = window.innerWidth <= 768;
-
-      if (!isMobile) {
-        gsap.set(".feature-card", { autoAlpha: 0, yPercent: 16, scale: 0.96 });
-        gsap.set(".feature-card.is-first", { autoAlpha: 1, yPercent: 0, scale: 1 });
-      }
-
       gsap.fromTo(".topbar", { autoAlpha: 0, y: -32 }, { autoAlpha: 1, y: 0, duration: 0.8, ease: "power3.out", delay: 0.12 });
 
       // Scroll progress bar — intentionally left empty here.
       // A separate useEffect below drives it with a native scroll listener,
       // which is reliable even when GSAP pin sections inflate the scroll height.
-
-      const featureCards = gsap.utils.toArray<HTMLElement>(".feature-card");
-
-      if (!isMobile) {
-        const featureTimeline = gsap.timeline({
-          scrollTrigger: {
-            trigger: ".showcase-shell",
-            start: "top top",
-            end: "+=120%",
-            scrub: 0.6,
-            pin: true,
-            anticipatePin: 1,
-          },
-        });
-
-        featureCards.forEach((card, index) => {
-          const position = index * 1.05;
-          if (index > 0) {
-            featureTimeline.fromTo(
-              card,
-              { autoAlpha: 0, yPercent: 16, scale: 0.96 },
-              { autoAlpha: 1, yPercent: 0, scale: 1, duration: 0.35 },
-              position,
-            );
-            featureTimeline.to(
-              featureCards[index - 1],
-              { autoAlpha: 0.15, yPercent: -18, scale: 0.95, duration: 0.35 },
-              position,
-            );
-          }
-          if (index < featureCards.length - 1) {
-            featureTimeline.to(card, { autoAlpha: 0.18, yPercent: -20, scale: 0.95, duration: 0.35 }, position + 0.58);
-          } else {
-            featureTimeline.to(card, { autoAlpha: 1, yPercent: -4, scale: 1.02, duration: 0.4 }, position + 0.6);
-          }
-        });
-      }
 
       gsap.utils.toArray<HTMLElement>(".reveal-up").forEach((element) => {
         gsap.fromTo(
@@ -806,7 +787,7 @@ export default function App() {
             {/* ── Hero Introduction ─────────────────────────────────────────── */}
             <section id="home" className="hero-section">
               <div className="hero-copy">
-                <p className="hero-kicker">VIT Bhopal · Linux · DevOps · AWS · Networking · Cybersecurity</p>
+                <p className="hero-kicker">Full-Stack Developer · DevOps Engineer · Systems Builder</p>
 
                 <h1 className="hero-title" aria-label="Vraj Shah">
                   <span className="hero-title__line">VRAJ</span>
@@ -814,7 +795,7 @@ export default function App() {
                 </h1>
 
                 <p className="hero-subtitle">
-                  CS undergrad at VIT Bhopal — building production systems in Linux, DevOps, AWS, and Python since semester one. Founder of ScholarStack, active researcher, and open to internships.
+                  Founder of ScholarStack — building production systems in Linux, DevOps, AWS, and Python since day one. Open to internships and full-time roles.
                 </p>
 
                 <div className="hero-actions">
@@ -845,15 +826,15 @@ export default function App() {
               <div className="hero-orbit-copy">
                 <div className="hero-orbit-copy__card glass-card">
                   <span>Current focus</span>
-                  <strong>DevOps pipelines, AWS cloud, network security, and Kubernetes — expanding into each with hands-on projects.</strong>
+                  <strong>DevOps, AWS, network security, and Kubernetes.</strong>
                   <div className="hero-orbit-copy__list">
                     <div>
                       <small>Build style</small>
-                      <p>Operate first, then automate. Real infra, real monitoring, real users — not toy setups.</p>
+                      <p>Operate first, then automate. Real infra, real users — not toy setups.</p>
                     </div>
                     <div>
                       <small>Right now</small>
-                      <p>B.Tech Computer Science · VIT Bhopal · CGPA 8.75 · Open to internships and collaborations.</p>
+                      <p>Just wrapped an SDE internship at Inspira — shipping Flutter + FastAPI in production.</p>
                     </div>
                   </div>
                 </div>
@@ -863,90 +844,13 @@ export default function App() {
               </div>
             </section>
 
-            {/* ── Showcase ──────────────────────────────────────────────────── */}
-            <section className="showcase-shell">
-              <div className="showcase-frame">
-                <div className="showcase-copy reveal-up">
-                  <p className="eyebrow">What I bring</p>
-                  <h2>Systems thinker. Platform builder. Researcher.</h2>
-                </div>
-
-                <div className="feature-stack">
-                  {featurePanels.map((panel, index) => (
-                    <article key={panel.id} className={`feature-card glass-card${index === 0 ? " is-first" : ""}`}>
-                      <span className="feature-card__index">{panel.id}</span>
-                      <p className="eyebrow">{panel.eyebrow}</p>
-                      <h3>{panel.title}</h3>
-                      <p>{panel.text}</p>
-                    </article>
-                  ))}
-                </div>
-              </div>
-            </section>
-
-            <div className="section-divider" aria-hidden="true" />
-
-            <section id="story" className="story-section section-shell">
-              <div className="section-heading reveal-up">
-                <p className="eyebrow">Story</p>
-                <h2>Building real systems since day one.</h2>
-              </div>
-
-              <div className="story-grid">
-                <div className="story-lead glass-card reveal-up">
-                  <p className="reveal-word-group">
-                    {renderWords(
-                      "I started ScholarStack during my first semester and have been running it in production ever since — 500+ users, real revenue, and a Linux server I manage entirely on my own. That hands-on operational experience is what drives everything else I build.",
-                    )}
-                  </p>
-                </div>
-
-                <div className="story-notes">
-                  <article className="story-note glass-card reveal-up">
-                    <strong>Solvit Hackathon Finalist</strong>
-                    <p>Designed and shipped a fully responsive municipal-services interface in 12 hours — led the team to finalist status with a 35% boost in live-demo engagement.</p>
-                  </article>
-                  <article className="story-note glass-card reveal-up">
-                    <strong>CGPA 8.75 · Open to opportunities</strong>
-                    <p>B.Tech Computer Science at VIT Bhopal. Currently exploring Kubernetes, TryHackMe CTFs, blockchain consensus, and SLO/SLI engineering. Open to internships and collaborations.</p>
-                  </article>
-                </div>
-              </div>
-            </section>
-
-            <div className="section-divider" aria-hidden="true" />
-
-            <section id="craft" className="services-section section-shell">
-              <div className="section-heading reveal-up">
-                <p className="eyebrow">Craft</p>
-                <h2>Infra. Security. Full-stack. All production-tested.</h2>
-              </div>
-
-              <div className="services-grid">
-                {services.map((service) => {
-                  const Icon = service.icon;
-                  return (
-                    <article key={service.title} className="service-card glass-card">
-                      <span className="service-card__icon">
-                        <Icon />
-                      </span>
-                      <h3>{service.title}</h3>
-                      <p>{service.text}</p>
-                    </article>
-                  );
-                })}
-              </div>
-            </section>
-
-            <div className="section-divider" aria-hidden="true" />
-
             <section id="work" ref={workSectionRef} className="work-section">
               <div className="work-stage">
                 <div className="work-intro reveal-up">
                   <p className="eyebrow">Selected work</p>
                   <h2>Seven shipped projects.</h2>
                   <p className="work-intro__text">
-                    Scroll to step through each project. System architecture on the left, engineering breakdown on the right — click any diagram to open full-screen.
+                    Scroll to step through each one — the system architecture on the left, the engineering breakdown on the right.
                   </p>
                 </div>
 
@@ -1081,6 +985,89 @@ export default function App() {
 
             <div className="section-divider" aria-hidden="true" />
 
+            <section id="story" className="story-section section-shell">
+              <div className="section-heading reveal-up">
+                <p className="eyebrow">Story</p>
+                <h2>Building real systems since day one.</h2>
+              </div>
+
+              <div className="story-grid">
+                <div className="story-lead glass-card reveal-up">
+                  <p className="reveal-word-group">
+                    {renderWords(
+                      "I started ScholarStack back in my first semester, and I'm still running it today — 500+ users, real revenue, and one Linux server I manage entirely on my own. That hands-on experience shapes how I approach everything else I build.",
+                    )}
+                  </p>
+                </div>
+
+                <div className="story-notes">
+                  <article className="story-note glass-card reveal-up">
+                    <strong>Solvit Hackathon Finalist</strong>
+                    <p>Designed and shipped a responsive municipal-services interface in just 12 hours, finishing as a finalist and lifting live-demo engagement by 35%.</p>
+                  </article>
+                  <article className="story-note glass-card reveal-up">
+                    <strong>CGPA 8.75 · Always building outside class</strong>
+                    <p>Studying at VIT Bhopal, and outside of class I'm digging into Kubernetes, CTF challenges, and blockchain consensus.</p>
+                  </article>
+                </div>
+              </div>
+            </section>
+
+            <div className="section-divider" aria-hidden="true" />
+
+            <section id="experience" className="experience-section section-shell">
+              <div className="section-heading reveal-up">
+                <p className="eyebrow">Experience</p>
+                <h2>Real codebases. Real production stakes.</h2>
+              </div>
+
+              <div className="experience-grid">
+                {experience.map((role) => (
+                  <article key={role.org} className="experience-card glass-card reveal-up">
+                    <div className="experience-card__header">
+                      <div>
+                        <h3>{role.role}</h3>
+                        <span className="experience-card__org">{role.org}</span>
+                      </div>
+                      <span className="experience-card__dates">{role.dates}</span>
+                    </div>
+                    <p className="experience-card__summary">{role.summary}</p>
+                    <ul className="experience-card__bullets">
+                      {role.bullets.map((bullet) => (
+                        <li key={bullet}>{bullet}</li>
+                      ))}
+                    </ul>
+                  </article>
+                ))}
+              </div>
+            </section>
+
+            <div className="section-divider" aria-hidden="true" />
+
+            <section id="craft" className="services-section section-shell">
+              <div className="section-heading reveal-up">
+                <p className="eyebrow">Craft</p>
+                <h2>Infra. Security. Full-stack. All production-tested.</h2>
+              </div>
+
+              <div className="services-grid">
+                {services.map((service) => {
+                  const Icon = service.icon;
+                  return (
+                    <article key={service.title} className="service-card glass-card">
+                      <span className="service-card__icon">
+                        <Icon />
+                      </span>
+                      <h3>{service.title}</h3>
+                      <p>{service.text}</p>
+                    </article>
+                  );
+                })}
+              </div>
+            </section>
+
+            <div className="section-divider" aria-hidden="true" />
+
             <section id="process" className="process-section section-shell">
               <div className="section-heading reveal-up">
                 <p className="eyebrow">How I work</p>
@@ -1117,17 +1104,13 @@ export default function App() {
                   <span className="resume-copy__label">Resume</span>
                   <h3>B.Tech CS · VIT Bhopal · CGPA 8.75</h3>
                   <p>
-                    Open to internships, collaborations, and engineering opportunities across cloud infrastructure, DevOps, cybersecurity, and full-stack development.
+                    I'm open to internships and full-time roles in cloud infrastructure, DevOps, security, and full-stack development.
                   </p>
 
                   <div className="resume-actions">
                     <a className="button button--primary" href="https://drive.google.com/file/d/1Da7fbSMTyYshX6KQ6iC4eOr9vYaJYfqk/view?usp=sharing" target="_blank" rel="noreferrer">
                       <FiFileText />
                       View Resume
-                    </a>
-                    <a className="button button--ghost" href="https://drive.google.com/uc?export=download&id=1Da7fbSMTyYshX6KQ6iC4eOr9vYaJYfqk" target="_blank" rel="noreferrer">
-                      <FiArrowDownRight />
-                      Download PDF
                     </a>
                   </div>
 
@@ -1146,6 +1129,15 @@ export default function App() {
                         <FiArrowUpRight />
                       </a>
                     ))}
+                  </div>
+
+                  <div className="resume-certs">
+                    <span className="resume-copy__label">Certifications</span>
+                    <ul className="resume-certs__list">
+                      {certifications.map((cert) => (
+                        <li key={cert}>{cert}</li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
 
@@ -1168,17 +1160,13 @@ export default function App() {
                 <p className="eyebrow">Contact</p>
                 <h2>Let's build something real.</h2>
                 <p>
-                  Cloud infrastructure, DevOps, cybersecurity, or full-stack — if the problem is interesting, I want to hear about it. Reach out directly.
+                  Whether it's cloud infrastructure, DevOps, security, or full-stack — if the problem sounds interesting, I want to hear about it.
                 </p>
 
                 <div className="contact-actions">
                   <a className="button button--primary" href="mailto:vraj1012006shah@gmail.com">
                     <FiMail />
                     Start the conversation
-                  </a>
-                  <a className="button button--ghost" href="#home" onClick={handleNavClick}>
-                    <FiCommand />
-                    Back to top
                   </a>
                 </div>
               </div>
@@ -1187,33 +1175,11 @@ export default function App() {
             <footer className="footer-badge glass-card" aria-label="Footer">
               <div className="footer-badge__copy">
                 <p className="eyebrow">Vraj Shah · VIT Bhopal · CGPA 8.75</p>
-                <strong>Linux systems, DevOps, cloud, networking, and full-stack development — open to internships and engineering collaborations.</strong>
+                <strong>Linux, DevOps, cloud, networking, and full-stack — open to internships and full-time roles.</strong>
                 <span>Founder of ScholarStack · 2 peer-reviewed papers · 40+ published articles · Solvit Hackathon Finalist.</span>
-                <div className="footer-badge__start">
-                  <span>Start here</span>
-                  <div className="footer-badge__start-links">
-                    <a href="#work" onClick={handleNavClick}>
-                      Featured work
-                    </a>
-                    <a href="#resume" onClick={handleNavClick}>
-                      Resume
-                    </a>
-                    <a href="#stack" onClick={handleNavClick}>
-                      Tech stack
-                    </a>
-                  </div>
-                </div>
               </div>
 
               <div className="footer-badge__actions">
-                <div className="footer-badge__nav">
-                  {navLinks.slice(1).map((link) => (
-                    <a key={link.href} href={link.href} onClick={handleNavClick}>
-                      {link.label}
-                    </a>
-                  ))}
-                </div>
-
                 <div className="footer-badge__social" aria-label="Footer social links">
                   {socialLinks.map((link) => {
                     const Icon = link.icon;
