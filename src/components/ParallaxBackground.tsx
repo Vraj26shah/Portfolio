@@ -329,16 +329,22 @@ export default function ParallaxBackground() {
 
       const scroll = Math.min(scrollY * 0.00052, 5.5);
 
-      // ── Stars: 4-layer parallax ───────────────────────────────────────────
-      starsDeep.position.set(sm.x * 0.04,  sm.y * 0.04  - scroll * 0.12, 0);
-      starsFar.position.set( sm.x * 0.12,  sm.y * 0.12  - scroll * 0.40, 0);
-      starsMid.position.set( sm.x * 0.38,  sm.y * 0.38  - scroll * 1.10, 0);
-      starsNear.position.set(sm.x * 0.85,  sm.y * 0.85  - scroll * 2.40, 0);
+      // ── Stars: 4-layer parallax, plus a slow idle drift so the field never
+      //    looks frozen while the mouse is still and the page isn't scrolling ──
+      const idleX = Math.sin(clock * 0.11) * 0.5;
+      const idleY = Math.cos(clock * 0.08) * 0.35;
+      starsDeep.position.set(sm.x * 0.04 + idleX * 0.10,  sm.y * 0.04  - scroll * 0.12 + idleY * 0.10, 0);
+      starsFar.position.set( sm.x * 0.12 + idleX * 0.22,  sm.y * 0.12  - scroll * 0.40 + idleY * 0.22, 0);
+      starsMid.position.set( sm.x * 0.38 + idleX * 0.40,  sm.y * 0.38  - scroll * 1.10 + idleY * 0.40, 0);
+      starsNear.position.set(sm.x * 0.85 + idleX * 0.60,  sm.y * 0.85  - scroll * 2.40 + idleY * 0.60, 0);
 
       // ── Galaxy: cinematic 3-axis scroll arc ──────────────────────────────
       const s = scroll / 5.5;
 
-      galaxyParent.rotation.y += 0.00018 + sm.x * 0.00060;
+      // Idle spin: fast enough to visibly drift within a few seconds even
+      // with the mouse untouched and no scrolling — previously this only
+      // moved 0.00018 rad/frame (~10 min per rotation), which read as static.
+      galaxyParent.rotation.y += 0.0011 + sm.x * 0.00060;
 
       const swingX = Math.sin(s * Math.PI) * (Math.PI * 0.48);
       const targetRotX = 0.28 + swingX - sm.y * 0.14;
@@ -371,10 +377,11 @@ export default function ParallaxBackground() {
 
       // ── Camera ────────────────────────────────────────────────────────────
       if (isMobile) {
-        // Mobile: clean mouse parallax only — no Lissajous, no banking
-        // Saves matrix computation and prevents motion sickness on small screens
-        camera.position.x = sm.x * 0.40;
-        camera.position.y = CAM_Y + sm.y * 0.30;
+        // Mobile: mouse/touch parallax + a small, slow idle drift (no banking —
+        // keeps it cheap and avoids motion sickness on small screens, but still
+        // reads as "alive" when the visitor isn't actively touching the screen).
+        camera.position.x = sm.x * 0.40 + Math.sin(clock * 0.10) * 0.10;
+        camera.position.y = CAM_Y + sm.y * 0.30 + Math.cos(clock * 0.08) * 0.06;
       } else {
         // Desktop: Lissajous figure-8 drift + mouse (feels weightless)
         camera.position.x = sm.x * 0.40 + Math.sin(clock * 0.18) * 0.22;

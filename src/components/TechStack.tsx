@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { useRef, useMemo, useState, useEffect } from "react";
+import { useRef, useMemo, useState, useEffect, type CSSProperties } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import {
@@ -10,7 +10,7 @@ import {
 } from "@react-three/rapier";
 
 /* ──────────────────────────────────────────────────────────────────────────
-   Tech items — all 21 skills from the resume
+   Tech items — core skills from the resume
    ────────────────────────────────────────────────────────────────────────── */
 type TechItem = { label: string; logo: string; dark: boolean; accent: string };
 
@@ -38,30 +38,134 @@ const techItems: TechItem[] = [
   { label: "VS Code",        logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg",               dark: false, accent: "#007ACC" },
   { label: "Flutter",        logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg",             dark: false, accent: "#02569B" },
   { label: "FastAPI",        logo: "https://cdn.simpleicons.org/fastapi/009688",                                                  dark: false, accent: "#009688" },
+  { label: "React",          logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",                  dark: true,  accent: "#61DAFB" },
+  { label: "Node.js",        logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",                dark: false, accent: "#339933" },
+  { label: "TypeScript",     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",        dark: false, accent: "#3178C6" },
+  { label: "MongoDB",        logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg",              dark: false, accent: "#47A248" },
+  { label: "n8n",            logo: "https://cdn.simpleicons.org/n8n/EA4560",                                                       dark: false, accent: "#EA4560" },
 ];
 
 /* ──────────────────────────────────────────────────────────────────────────
-   Static mobile fallback — pure CSS marquee, zero WebGL
-   Shown on phones where the Three.js canvas would be too heavy.
+   Orbiting mobile fallback — pure CSS orbits, zero WebGL/canvas.
+   Shown on phones where the Three.js physics canvas would be too heavy.
+   Three rings of tech logos orbit a glowing core; each icon counter-rotates
+   so the logo itself always stays upright while its ring spins.
    ────────────────────────────────────────────────────────────────────────── */
-function StaticTechGrid() {
-  const row1 = techItems.slice(0, 11);
-  const row2 = techItems.slice(11);
+// Ring sizes are expressed as a ratio of --orbit-base (defined responsively in
+// CSS via clamp()), not fixed pixels, so the whole formation scales down cleanly
+// on narrow phones instead of overflowing or needing a pinch-zoom to read.
+type OrbitRing = { scale: number; duration: number; items: { item: TechItem; angle: number }[] };
+
+function techByLabel(label: string): TechItem {
+  const found = techItems.find((t) => t.label === label);
+  if (!found) throw new Error(`Unknown tech item: ${label}`);
+  return found;
+}
+
+const orbitRings: OrbitRing[] = [
+  {
+    scale: 0.636,
+    duration: 20,
+    items: [
+      { item: techByLabel("Python"), angle: -60 },
+      { item: techByLabel("Docker"), angle: 0 },
+      { item: techByLabel("AWS"), angle: 60 },
+    ],
+  },
+  {
+    scale: 0.818,
+    duration: 26,
+    items: [
+      { item: techByLabel("React"), angle: -90 },
+      { item: techByLabel("FastAPI"), angle: 0 },
+    ],
+  },
+  {
+    scale: 1,
+    duration: 32,
+    items: [
+      { item: techByLabel("TypeScript"), angle: -60 },
+      { item: techByLabel("MongoDB"), angle: 0 },
+      { item: techByLabel("n8n"), angle: 60 },
+    ],
+  },
+];
+
+function OrbitingTechStack() {
+  // Real phones have no mouse, so plain CSS :hover never fires — a tap needs
+  // to persistently reveal the label (not just flash during :active) until
+  // the visitor taps the same icon again or taps empty space to dismiss.
+  const [activeKey, setActiveKey] = useState<string | null>(null);
+
   return (
-    <div className="techstack-static">
+    <div className="techstack-static" onClick={() => setActiveKey(null)}>
       <div className="techstack-ghost-title" aria-hidden="true">MY TECH STACK</div>
-      <div className="techstack-marquee-wrap">
-        {[row1, row2].map((row, ri) => (
-          <div key={ri} className={`techstack-marquee-row techstack-marquee-row--${ri % 2 === 0 ? "fwd" : "rev"}`}>
-            {/* Duplicate for seamless loop */}
-            {[...row, ...row].map((item, i) => (
-              <div key={`${item.label}-${i}`} className="techstack-chip">
-                <img src={item.logo} alt={item.label} width={20} height={20} loading="lazy" />
-                <span>{item.label}</span>
-              </div>
-            ))}
-          </div>
-        ))}
+
+      <div className="orbit-stage">
+        <div className="orbit-core" aria-hidden="true">
+          <span className="orbit-core__ring" />
+          <span className="orbit-core__glow" />
+        </div>
+
+        {orbitRings.map((ring, ringIndex) => {
+          const isCW = ringIndex % 2 === 0;
+          const orbitAnim = isCW ? "orbitCW" : "orbitCCW";
+          const counterAnim = isCW ? "orbitCounterCW" : "orbitCounterCCW";
+          const doubled = [
+            ...ring.items,
+            ...ring.items.map((it) => ({ ...it, angle: it.angle + 180 })),
+          ];
+
+          return (
+            <div
+              key={ringIndex}
+              className="orbit-ring"
+              style={
+                {
+                  width: `calc(var(--orbit-base) * ${ring.scale})`,
+                  height: `calc(var(--orbit-base) * ${ring.scale})`,
+                } as CSSProperties
+              }
+            >
+              {doubled.map(({ item, angle }, i) => {
+                const key = `${ringIndex}-${item.label}-${i}`;
+                return (
+                  <div
+                    key={key}
+                    className="orbit-icon-arm"
+                    style={
+                      {
+                        "--start-angle": `${angle}deg`,
+                        animation: `${orbitAnim} ${ring.duration}s linear infinite`,
+                      } as CSSProperties
+                    }
+                  >
+                    <div
+                      className={`orbit-icon${activeKey === key ? " is-active" : ""}`}
+                      tabIndex={0}
+                      role="img"
+                      aria-label={item.label}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setActiveKey((prev) => (prev === key ? null : key));
+                      }}
+                      style={
+                        {
+                          "--counter-angle": `${-angle}deg`,
+                          animation: `${counterAnim} ${ring.duration}s linear infinite`,
+                          borderColor: `${item.accent}55`,
+                        } as CSSProperties
+                      }
+                    >
+                      <img src={item.logo} alt="" width={22} height={22} loading="lazy" />
+                      <span className="orbit-icon__label">{item.label}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -283,7 +387,7 @@ export default function TechStack() {
   }, [isMobile]);
 
   // ── Mobile: render a pure-CSS marquee instead of a heavy WebGL canvas ──
-  if (isMobile) return <StaticTechGrid />;
+  if (isMobile) return <OrbitingTechStack />;
 
   // ── Desktop: full 3D physics canvas ──
   return (

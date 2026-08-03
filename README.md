@@ -56,6 +56,10 @@ public/
 
 The portfolio content is kept in `src/App.tsx`. Update the project, experience, certification, research-paper, and social-link data there. Project screenshots live in `public/`. The resume button and embedded preview use Google Drive links; replace both links together when publishing a new resume.
 
+## Contact form
+
+The contact form (`src/components/ContactForm.tsx`) posts to a Vercel serverless function (`api/contact.ts`) that sends two emails via Gmail SMTP — one notifying the site owner, one confirming receipt to the visitor. See `.env.example` for how to generate a Gmail App Password and configure `GMAIL_USER` / `GMAIL_APP_PASSWORD`. Because `/api` only runs on Vercel's infrastructure, testing it locally requires `vercel dev` (Vercel CLI) rather than plain `npm run dev`.
+
 ## License
 
 This repository is licensed under the [Personal Portfolio License](LICENSE). Please review it before reusing the code or assets.

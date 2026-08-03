@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="480" viewBox="0 0 600 480">
+  <defs>
+    <marker id="arrC" markerWidth="7" markerHeight="7" refX="5.5" refY="2.5" orient="auto">
+      <path d="M0,0 L0,5 L6,2.5 z" fill="#64748b"/>
+    </marker>
+    <filter id="nodeShadowC" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+    <pattern id="gridC" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" fill="none" stroke="#ffffff" stroke-opacity="0.035" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="600" height="480" fill="#0b1220"/>
+  <rect width="600" height="480" fill="url(#gridC)"/>
+
+  <text x="24" y="30" fill="#7c93b8" font-family="Arial,sans-serif" font-size="10.5" font-weight="700" letter-spacing="1.5">ARCHITECTURE OVERVIEW</text>
+  <circle cx="562" cy="26" r="2.6" fill="#475569"/>
+  <circle cx="574" cy="26" r="2.6" fill="#475569"/>
+  <circle cx="586" cy="26" r="2.6" fill="#475569"/>
+  <line x1="0" y1="44" x2="600" y2="44" stroke="#ffffff" stroke-opacity="0.06" stroke-width="1"/>
+
+  <!-- wiring: Developer -> CI -> Registry -> EC2 Host -> App Container -> Prometheus -> Grafana -> Alerts -->
+  <g stroke="#64748b" stroke-width="1.6" fill="none">
+    <line x1="162" y1="100" x2="268" y2="100" marker-end="url(#arrC)"/>
+    <line x1="332" y1="100" x2="438" y2="100" marker-end="url(#arrC)"/>
+    <line x1="470" y1="132" x2="470" y2="198" marker-end="url(#arrC)"/>
+    <line x1="438" y1="230" x2="332" y2="230" marker-end="url(#arrC)"/>
+    <line x1="268" y1="230" x2="162" y2="230" marker-end="url(#arrC)"/>
+    <line x1="130" y1="262" x2="130" y2="328" marker-end="url(#arrC)"/>
+    <line x1="162" y1="360" x2="268" y2="360" marker-end="url(#arrC)"/>
+  </g>
+
+  <!-- Developer -->
+  <g filter="url(#nodeShadowC)"><circle cx="130" cy="100" r="32" fill="#2b220f" stroke="#ffd86d" stroke-width="1.6"/></g>
+  <g transform="translate(115,85) scale(1.25)" stroke="#ffd86d" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/>
+  </g>
+  <text x="130" y="150" text-anchor="middle" fill="#cbd5e1" font-family="Arial,sans-serif" font-size="10.5" font-weight="700" letter-spacing="0.4">DEVELOPER</text>
+
+  <!-- CI/CD -->
+  <g filter="url(#nodeShadowC)"><circle cx="300" cy="100" r="32" fill="#0f2436" stroke="#7bdcff" stroke-width="1.6"/></g>
+  <g transform="translate(285,85) scale(1.25)" stroke="#7bdcff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+  </g>
+  <text x="300" y="150" text-anchor="middle" fill="#cbd5e1" font-family="Arial,sans-serif" font-size="10.5" font-weight="700" letter-spacing="0.4">CI/CD · 5 STAGES</text>
+
+  <!-- Registry -->
+  <g filter="url(#nodeShadowC)"><circle cx="470" cy="100" r="32" fill="#0f2436" stroke="#7bdcff" stroke-width="1.6"/></g>
+  <g transform="translate(455,85) scale(1.25)" stroke="#7bdcff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+    <polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>
+  </g>
+  <text x="470" y="150" text-anchor="middle" fill="#cbd5e1" font-family="Arial,sans-serif" font-size="10.5" font-weight="700" letter-spacing="0.4">REGISTRY</text>
+
+  <!-- EC2 Host -->
+  <g filter="url(#nodeShadowC)"><circle cx="470" cy="230" r="32" fill="#0f2436" stroke="#7bdcff" stroke-width="1.6"/></g>
+  <g transform="translate(455,215) scale(1.25)" stroke="#7bdcff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+  </g>
+  <text x="470" y="280" text-anchor="middle" fill="#cbd5e1" font-family="Arial,sans-serif" font-size="10.5" font-weight="700" letter-spacing="0.3">EC2 HOST · SSH + fail2ban</text>
+
+  <!-- App Container -->
+  <g filter="url(#nodeShadowC)"><circle cx="300" cy="230" r="32" fill="#0f2436" stroke="#7bdcff" stroke-width="1.6"/></g>
+  <g transform="translate(285,215) scale(1.25)" stroke="#7bdcff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>
+  </g>
+  <text x="300" y="280" text-anchor="middle" fill="#cbd5e1" font-family="Arial,sans-serif" font-size="10.5" font-weight="700" letter-spacing="0.3">APP CONTAINER</text>
+
+  <!-- Prometheus -->
+  <g filter="url(#nodeShadowC)"><circle cx="130" cy="230" r="32" fill="#2a0f1c" stroke="#ff6aa6" stroke-width="1.6"/></g>
+  <g transform="translate(115,215) scale(1.25)" stroke="#ff6aa6" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+  </g>
+  <text x="130" y="280" text-anchor="middle" fill="#cbd5e1" font-family="Arial,sans-serif" font-size="10.5" font-weight="700" letter-spacing="0.4">PROMETHEUS</text>
+
+  <!-- Grafana -->
+  <g filter="url(#nodeShadowC)"><circle cx="130" cy="360" r="32" fill="#2a0f1c" stroke="#ff6aa6" stroke-width="1.6"/></g>
+  <g transform="translate(115,345) scale(1.25)" stroke="#ff6aa6" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+  </g>
+  <text x="130" y="410" text-anchor="middle" fill="#cbd5e1" font-family="Arial,sans-serif" font-size="10.5" font-weight="700" letter-spacing="0.4">GRAFANA</text>
+
+  <!-- Alerts -->
+  <g filter="url(#nodeShadowC)"><circle cx="300" cy="360" r="32" fill="#2a0f1c" stroke="#ff6aa6" stroke-width="1.6"/></g>
+  <g transform="translate(285,345) scale(1.25)" stroke="#ff6aa6" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+  </g>
+  <text x="300" y="410" text-anchor="middle" fill="#cbd5e1" font-family="Arial,sans-serif" font-size="10.5" font-weight="700" letter-spacing="0.4">ALERTS · SLACK</text>
+</svg>

@@ -1,0 +1,188 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+  <defs>
+    <marker id="arrA" markerWidth="7" markerHeight="7" refX="5.5" refY="2.5" orient="auto">
+      <path d="M0,0 L0,5 L6,2.5 z" fill="#64748b"/>
+    </marker>
+    <filter id="nodeShadow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+    <pattern id="gridA" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" fill="none" stroke="#ffffff" stroke-opacity="0.035" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="600" height="600" fill="#0b1220"/>
+  <rect width="600" height="600" fill="url(#gridA)"/>
+
+  <!-- chrome header -->
+  <text x="24" y="30" fill="#7c93b8" font-family="Arial,sans-serif" font-size="10.5" font-weight="700" letter-spacing="1.5">ARCHITECTURE OVERVIEW</text>
+  <circle cx="562" cy="26" r="2.6" fill="#475569"/>
+  <circle cx="574" cy="26" r="2.6" fill="#475569"/>
+  <circle cx="586" cy="26" r="2.6" fill="#475569"/>
+  <line x1="0" y1="44" x2="600" y2="44" stroke="#ffffff" stroke-opacity="0.06" stroke-width="1"/>
+
+  <!-- ═══ connective wiring (drawn first, under nodes) ═══ -->
+  <g stroke="#64748b" stroke-width="1.6" fill="none">
+    <!-- client -> gateway -->
+    <line x1="300" y1="124" x2="300" y2="164" marker-end="url(#arrA)"/>
+    <!-- gateway -> 4 agents -->
+    <path d="M300,228 L104,276" marker-end="url(#arrA)"/>
+    <path d="M300,228 L234,276" marker-end="url(#arrA)"/>
+    <path d="M300,228 L366,276" marker-end="url(#arrA)"/>
+    <path d="M300,228 L496,276" marker-end="url(#arrA)"/>
+    <!-- sequential pipeline order -->
+    <line x1="136" y1="308" x2="202" y2="308" marker-end="url(#arrA)"/>
+    <line x1="266" y1="308" x2="334" y2="308" marker-end="url(#arrA)"/>
+    <line x1="398" y1="308" x2="464" y2="308" marker-end="url(#arrA)"/>
+    <!-- agents -> llm backends -->
+    <line x1="104" y1="340" x2="196" y2="384" marker-end="url(#arrA)"/>
+    <line x1="366" y1="340" x2="212" y2="384" marker-end="url(#arrA)"/>
+    <line x1="234" y1="340" x2="388" y2="384" marker-end="url(#arrA)"/>
+    <line x1="496" y1="340" x2="404" y2="384" marker-end="url(#arrA)"/>
+    <!-- ollama <-> gemini fallback -->
+    <line x1="236" y1="412" x2="286" y2="412" stroke-dasharray="3 4"/>
+    <line x1="314" y1="412" x2="364" y2="412" stroke-dasharray="3 4" marker-end="url(#arrA)"/>
+    <!-- llm layer -> shared data/deploy layer -->
+    <path d="M300,444 L300,460 L204,460 L204,480" marker-end="url(#arrA)"/>
+    <path d="M300,444 L300,460 L396,460 L396,480" marker-end="url(#arrA)"/>
+  </g>
+
+  <!-- ═══ Client (React) ═══ -->
+  <g filter="url(#nodeShadow)">
+    <circle cx="300" cy="92" r="32" fill="#132036" stroke="#7bdcff" stroke-opacity="0.55" stroke-width="1.5"/>
+  </g>
+  <g transform="translate(285,77) scale(1.25)" stroke="#7bdcff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+    <line x1="8" y1="21" x2="16" y2="21"/>
+    <line x1="12" y1="17" x2="12" y2="21"/>
+  </g>
+  <text x="300" y="142" text-anchor="middle" fill="#cbd5e1" font-family="Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="0.5">REACT</text>
+
+  <!-- ═══ Gateway (FastAPI) ═══ -->
+  <g filter="url(#nodeShadow)">
+    <circle cx="300" cy="196" r="32" fill="#132036" stroke="#7bdcff" stroke-opacity="0.55" stroke-width="1.5"/>
+  </g>
+  <g transform="translate(285,181) scale(1.25)" stroke="#7bdcff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="2" width="20" height="8" rx="2" ry="2"/>
+    <rect x="2" y="14" width="20" height="8" rx="2" ry="2"/>
+    <line x1="6" y1="6" x2="6.01" y2="6"/>
+    <line x1="6" y1="18" x2="6.01" y2="18"/>
+  </g>
+  <text x="300" y="246" text-anchor="middle" fill="#cbd5e1" font-family="Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="0.5">FASTAPI</text>
+
+  <!-- security badge (JWT + RBAC) -->
+  <g filter="url(#nodeShadow)">
+    <circle cx="338" cy="168" r="15" fill="#2a0f1c" stroke="#ff6aa6" stroke-opacity="0.6" stroke-width="1.3"/>
+  </g>
+  <g transform="translate(330,160) scale(0.667)" stroke="#ff6aa6" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+  </g>
+
+  <!-- ═══ 4-agent pipeline ═══ -->
+  <!-- Analyzer -->
+  <g filter="url(#nodeShadow)">
+    <circle cx="104" cy="308" r="32" fill="#0f2436" stroke="#7bdcff" stroke-width="1.6"/>
+  </g>
+  <g transform="translate(89,293) scale(1.25)" stroke="#7bdcff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="11" cy="11" r="8"/>
+    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+  </g>
+  <text x="104" y="358" text-anchor="middle" fill="#cbd5e1" font-family="Arial,sans-serif" font-size="10.5" font-weight="700" letter-spacing="0.4">ANALYZER</text>
+
+  <!-- Executor -->
+  <g filter="url(#nodeShadow)">
+    <circle cx="234" cy="308" r="32" fill="#0f2436" stroke="#7bdcff" stroke-width="1.6"/>
+  </g>
+  <g transform="translate(219,293) scale(1.25)" stroke="#7bdcff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="4" y="4" width="16" height="16" rx="2" ry="2"/>
+    <rect x="9" y="9" width="6" height="6"/>
+    <line x1="9" y1="1" x2="9" y2="4"/>
+    <line x1="15" y1="1" x2="15" y2="4"/>
+    <line x1="9" y1="20" x2="9" y2="23"/>
+    <line x1="15" y1="20" x2="15" y2="23"/>
+    <line x1="20" y1="9" x2="23" y2="9"/>
+    <line x1="20" y1="14" x2="23" y2="14"/>
+    <line x1="1" y1="9" x2="4" y2="9"/>
+    <line x1="1" y1="14" x2="4" y2="14"/>
+  </g>
+  <text x="234" y="358" text-anchor="middle" fill="#cbd5e1" font-family="Arial,sans-serif" font-size="10.5" font-weight="700" letter-spacing="0.4">EXECUTOR</text>
+
+  <!-- Validator -->
+  <g filter="url(#nodeShadow)">
+    <circle cx="366" cy="308" r="32" fill="#0f2436" stroke="#7bdcff" stroke-width="1.6"/>
+  </g>
+  <g transform="translate(351,293) scale(1.25)" stroke="#7bdcff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+    <polyline points="9 12 11 14 15 10"/>
+  </g>
+  <text x="366" y="358" text-anchor="middle" fill="#cbd5e1" font-family="Arial,sans-serif" font-size="10.5" font-weight="700" letter-spacing="0.4">VALIDATOR</text>
+
+  <!-- Reporter -->
+  <g filter="url(#nodeShadow)">
+    <circle cx="496" cy="308" r="32" fill="#0f2436" stroke="#7bdcff" stroke-width="1.6"/>
+  </g>
+  <g transform="translate(481,293) scale(1.25)" stroke="#7bdcff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+    <polyline points="14 2 14 8 20 8"/>
+    <line x1="16" y1="13" x2="8" y2="13"/>
+    <line x1="16" y1="17" x2="8" y2="17"/>
+  </g>
+  <text x="496" y="358" text-anchor="middle" fill="#cbd5e1" font-family="Arial,sans-serif" font-size="10.5" font-weight="700" letter-spacing="0.4">REPORTER</text>
+
+  <!-- ═══ LLM backends ═══ -->
+  <!-- Ollama (local) -->
+  <g filter="url(#nodeShadow)">
+    <circle cx="204" cy="412" r="32" fill="#2b220f" stroke="#ffd86d" stroke-width="1.6"/>
+  </g>
+  <g transform="translate(189,397) scale(1.25)" stroke="#ffd86d" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+    <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+    <line x1="12" y1="22.08" x2="12" y2="12"/>
+  </g>
+  <text x="204" y="462" text-anchor="middle" fill="#cbd5e1" font-family="Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="0.4">OLLAMA</text>
+
+  <!-- Gemini (cloud) -->
+  <g filter="url(#nodeShadow)">
+    <circle cx="396" cy="412" r="32" fill="#2b220f" stroke="#ffd86d" stroke-width="1.6"/>
+  </g>
+  <g transform="translate(381,397) scale(1.25)" stroke="#ffd86d" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+  </g>
+  <text x="396" y="462" text-anchor="middle" fill="#cbd5e1" font-family="Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="0.4">GEMINI</text>
+
+  <!-- fallback badge between the two LLMs -->
+  <g filter="url(#nodeShadow)">
+    <circle cx="300" cy="412" r="13" fill="#1a1508" stroke="#ffd86d" stroke-opacity="0.6" stroke-width="1.2"/>
+  </g>
+  <g transform="translate(292.5,404.5) scale(0.625)" stroke="#ffd86d" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="17 1 21 5 17 9"/>
+    <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+    <polyline points="7 23 3 19 7 15"/>
+    <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+  </g>
+
+  <!-- ═══ Realtime + deployment layer ═══ -->
+  <!-- SpacetimeDB -->
+  <g filter="url(#nodeShadow)">
+    <circle cx="204" cy="512" r="32" fill="#2a0f1c" stroke="#ff6aa6" stroke-width="1.6"/>
+  </g>
+  <g transform="translate(189,497) scale(1.25)" stroke="#ff6aa6" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="12" cy="5" rx="9" ry="3"/>
+    <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+  </g>
+  <text x="204" y="562" text-anchor="middle" fill="#cbd5e1" font-family="Arial,sans-serif" font-size="10.5" font-weight="700" letter-spacing="0.3">SPACETIMEDB</text>
+
+  <!-- Docker -> Render -->
+  <g filter="url(#nodeShadow)">
+    <circle cx="396" cy="512" r="32" fill="#2a0f1c" stroke="#ff6aa6" stroke-width="1.6"/>
+  </g>
+  <g transform="translate(381,497) scale(1.25)" stroke="#ff6aa6" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/>
+    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+    <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+    <line x1="12" y1="22.08" x2="12" y2="12"/>
+  </g>
+  <text x="396" y="562" text-anchor="middle" fill="#cbd5e1" font-family="Arial,sans-serif" font-size="10.5" font-weight="700" letter-spacing="0.3">DOCKER → RENDER</text>
+</svg>

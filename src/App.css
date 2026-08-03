@@ -73,13 +73,20 @@
   font-family: var(--font-display);
   font-size: clamp(5rem, 18vw, 10rem);
   font-weight: 700;
-  line-height: 0.88;
+  /* line-height was 0.88, too tight for the glyphs' own box at this size. */
+  line-height: 1.15;
+  padding-block: 0.1em;
   letter-spacing: -0.1em;
   background: linear-gradient(135deg, var(--text-primary), var(--accent-cyan));
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 40px rgba(123, 220, 255, 0.25));
+  /* filter:drop-shadow() combined with background-clip:text is a known
+     Chromium/WebKit quirk that visibly slices the top off large glyphs,
+     regardless of line-height — that's what was actually cutting the digits
+     off, not just the spacing. text-shadow doesn't have that interaction
+     and gives an equivalent glow. */
+  text-shadow: 0 0 32px rgba(123, 220, 255, 0.55), 0 0 70px rgba(123, 220, 255, 0.3);
 }
 
 .loading-screen__line-shell {
@@ -433,53 +440,7 @@ main {
   padding-bottom: 7rem;
 }
 
-.social-rail {
-  position: fixed;
-  /* Only ever renders once the viewport gutter beside the centered 1220px
-     content column is wide enough to hold the rail without overlapping it
-     (see the 1450px media query below) — so this calc never needs a clamp. */
-  left: calc((100vw - 1220px) / 2 - 5.35rem);
-  top: 50%;
-  bottom: auto;
-  transform: translateY(-50%);
-  z-index: 30;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.72rem 0.58rem;
-  border-radius: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025)),
-    rgba(8, 12, 20, 0.9);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.07),
-    0 24px 60px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-}
-
-.social-rail__item {
-  display: inline-grid;
-  place-items: center;
-  width: 2.9rem;
-  height: 2.9rem;
-  border-radius: 999px;
-  color: rgba(241, 246, 255, 0.92);
-  background: transparent;
-  transition: transform 220ms ease, color 220ms ease, background-color 220ms ease;
-}
-
-.social-rail__item:hover {
-  transform: translateY(-2px);
-  color: var(--text-primary);
-  background: linear-gradient(135deg, rgba(123, 220, 255, 0.16), rgba(255, 106, 166, 0.16));
-}
-
-.social-rail__item.is-placeholder {
-  opacity: 0.72;
-}
+/* .social-rail removed — redundant with the footer and mobile-nav social links */
 
 /* ─── Section Dividers ────────────────────────────────────────────────────── */
 .section-divider {
@@ -523,8 +484,7 @@ main {
   text-transform: uppercase;
 }
 
-.section-heading h2,
-.contact-card h2 {
+.section-heading h2 {
   margin: 0;
   font-family: var(--font-display);
   font-weight: 700;
@@ -662,7 +622,7 @@ main {
 .service-card p,
 .timeline-step p,
 .project-card__body p,
-.contact-card p {
+.contact-copy p {
   color: var(--text-muted);
   line-height: 1.72;
   font-size: 0.96rem;
@@ -674,12 +634,12 @@ main {
 .project-card,
 .tech-group,
 .timeline-step,
-.contact-card {
+.contact-copy,
+.contact-form-panel {
   border-radius: 1.6rem;
 }
 
-.section-heading h2,
-.contact-card h2 {
+.section-heading h2 {
   font-size: clamp(2.5rem, 6vw, 4.8rem);
 }
 
@@ -740,8 +700,7 @@ main {
 .story-lead,
 .story-note,
 .service-card,
-.timeline-step,
-.contact-card {
+.timeline-step {
   padding: 1.6rem;
 }
 
@@ -1605,10 +1564,17 @@ main {
 /* ─── Tech Stack ──────────────────────────────────────────────────────────── */
 .techstack-shell {
   padding: 0;
-  overflow: hidden;
+  /* No overflow:hidden here — the children below use the classic full-bleed
+     trick (width:100vw + negative margin) to escape <main>'s centered
+     1220px column and reach the true screen edges. Clipping it at this
+     level cut that off, leaving the black stage narrower than the viewport
+     with the starfield visible down one side. Each child already clips its
+     own internal content via its own overflow:hidden. */
 }
 
-/* Suspense skeleton — dark rectangle while the lazy chunk loads */
+/* Suspense skeleton — dark rectangle while the lazy chunk loads.
+   Sized to match whichever version (mobile orbit vs desktop canvas) will
+   actually render, so there's no layout jump once the chunk arrives. */
 .techstack-skeleton {
   width: 100vw;
   margin-left: calc(50% - 50vw);
@@ -1616,12 +1582,18 @@ main {
   background: #000;
 }
 
+@media (max-width: 768px) {
+  .techstack-skeleton {
+    height: clamp(18rem, 56vw, 26rem);
+  }
+}
+
 /* ── Static mobile fallback ───────────────────────────────────────────────── */
 .techstack-static {
   position: relative;
   width: 100vw;
   margin-left: calc(50% - 50vw);
-  height: clamp(22rem, 55vw, 32rem);
+  height: clamp(18rem, 56vw, 26rem);
   background: #000;
   display: flex;
   flex-direction: column;
@@ -1630,6 +1602,11 @@ main {
   overflow: hidden;
   isolation: isolate;
   gap: 1.5rem;
+  /* Design-time size tokens for the orbit formation below — a single source
+     of truth so rings, icons, and their centering offsets all scale together
+     instead of drifting apart on narrow screens. */
+  --orbit-base: clamp(12rem, 62vw, 17rem);
+  --icon-size: clamp(2rem, 7.6vw, 2.6rem);
 }
 
 /* Shared ghost title used by both desktop and mobile technology sections. */
@@ -1637,58 +1614,165 @@ main {
   font-size: clamp(3rem, 11vw, 5rem);
 }
 
-.techstack-marquee-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+/* ── Orbiting rings — mobile Tech Stack visual ────────────────────────────── */
+.orbit-stage {
+  position: relative;
   width: 100%;
-}
-
-.techstack-marquee-row {
+  height: 100%;
   display: flex;
-  gap: 0.75rem;
-  /* Prevent wrapping — the duplicated items provide the seamless loop */
-  flex-wrap: nowrap;
-  width: max-content;
-  animation: marquee-fwd 28s linear infinite;
-}
-
-.techstack-marquee-row--rev {
-  animation-name: marquee-rev;
-  animation-duration: 32s;
-}
-
-@keyframes marquee-fwd {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-
-@keyframes marquee-rev {
-  from { transform: translateX(-50%); }
-  to   { transform: translateX(0); }
-}
-
-.techstack-chip {
-  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0.9rem;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(230, 242, 255, 0.9);
-  font-size: 0.82rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  white-space: nowrap;
-  flex-shrink: 0;
+  justify-content: center;
 }
 
-.techstack-chip img {
-  width: 20px;
-  height: 20px;
+/* Centered, fully-visible rings — not anchored to the bottom edge — so the
+   formation actually fills the stage instead of leaving the top half of the
+   box empty above a half-clipped "horizon". */
+.orbit-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(3.6rem, 15vw, 5rem);
+  height: clamp(3.6rem, 15vw, 5rem);
+  z-index: 2;
+}
+
+.orbit-core__glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--accent-cyan), var(--accent-pink) 55%, transparent 78%);
+  filter: blur(2px);
+  animation: orbitCorePulse 3.2s ease-in-out infinite;
+}
+
+.orbit-core__ring {
+  position: absolute;
+  inset: -0.6rem;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  animation: orbitCW 14s linear infinite;
+}
+
+@keyframes orbitCorePulse {
+  0%, 100% { transform: scale(0.92); opacity: 0.85; }
+  50%      { transform: scale(1.06); opacity: 1; }
+}
+
+.orbit-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.orbit-icon-arm {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  height: 50%;
+  margin-left: calc(var(--icon-size) / -2);
+  transform-origin: bottom center;
+  animation-name: orbitCW;
+}
+
+.orbit-icon {
+  width: var(--icon-size);
+  height: var(--icon-size);
+  margin-top: calc(var(--icon-size) / -2);
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(8, 13, 22, 0.92);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+  position: relative;
+  z-index: 1;
+  cursor: pointer;
+  outline: none;
+  transition: box-shadow 180ms ease;
+}
+
+.orbit-icon:hover,
+.orbit-icon:focus-visible,
+.orbit-icon:active,
+.orbit-icon.is-active {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.28), 0 10px 24px rgba(0, 0, 0, 0.4);
+  /* .orbit-icon has its own z-index, so it's its own stacking context — its
+     label (z-index:5) can only out-rank *its own* children, not a sibling
+     icon from another ring. Without this, an inner-ring icon's label could
+     render underneath a later-painted outer-ring icon's opaque circle,
+     making the name invisible even though the tooltip was technically
+     showing. Bumping the whole icon's z-index while active/hovered lifts
+     its entire stacking context — label included — above every other icon. */
+  z-index: 20;
+}
+
+.orbit-icon img {
+  width: calc(var(--icon-size) * 0.48);
+  height: calc(var(--icon-size) * 0.48);
   object-fit: contain;
-  flex-shrink: 0;
+}
+
+/* Label tooltip — shown on hover (desktop) and tap/focus (touch), so the
+   orbit stays icon-only until someone actually wants to know what it is. */
+.orbit-icon__label {
+  position: absolute;
+  bottom: calc(100% + 0.5rem);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  padding: 0.32rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(8, 13, 22, 0.96);
+  color: var(--text-primary);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease, transform 180ms ease;
+  z-index: 5;
+}
+
+.orbit-icon:hover .orbit-icon__label,
+.orbit-icon:focus-visible .orbit-icon__label,
+.orbit-icon:active .orbit-icon__label,
+.orbit-icon.is-active .orbit-icon__label {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+@keyframes orbitCW {
+  from { transform: rotate(var(--start-angle)); }
+  to   { transform: rotate(calc(var(--start-angle) + 360deg)); }
+}
+
+@keyframes orbitCCW {
+  from { transform: rotate(var(--start-angle)); }
+  to   { transform: rotate(calc(var(--start-angle) - 360deg)); }
+}
+
+@keyframes orbitCounterCW {
+  from { transform: rotate(var(--counter-angle)); }
+  to   { transform: rotate(calc(var(--counter-angle) - 360deg)); }
+}
+
+@keyframes orbitCounterCCW {
+  from { transform: rotate(var(--counter-angle)); }
+  to   { transform: rotate(calc(var(--counter-angle) + 360deg)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit-core__ring,
+  .orbit-icon-arm,
+  .orbit-icon,
+  .orbit-core__glow {
+    animation: none;
+  }
 }
 
 .techstack-stage {
@@ -1942,17 +2026,34 @@ main {
   scroll-margin-top: 5rem;
 }
 
-.contact-card {
-  max-width: 58rem;
-  margin: 0 auto;
-  padding: 2.2rem 2rem;
-  text-align: center;
+.contact-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 1.4rem;
+  align-items: stretch;
+  margin-top: 2.5rem;
+}
+
+.contact-copy,
+.contact-form-panel {
+  padding: 1.9rem 1.8rem;
   position: relative;
   overflow: hidden;
 }
 
-/* Animated border glow */
-.contact-card::before {
+.contact-copy {
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+}
+
+.contact-copy__note {
+  color: rgba(220, 235, 255, 0.56);
+  font-size: 0.9rem;
+}
+
+/* Animated border glow — draws the eye to the form, the primary action of the section */
+.contact-form-panel::before {
   content: "";
   position: absolute;
   inset: -1px;
@@ -1971,21 +2072,111 @@ main {
   to { filter: hue-rotate(360deg); }
 }
 
-.contact-card h2 {
-  background: linear-gradient(135deg, var(--text-primary), var(--accent-cyan));
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.contact-card p {
-  max-width: 44rem;
-  margin-inline: auto;
-}
-
 .contact-actions {
-  margin-top: 2rem;
-  justify-content: center;
+  margin-top: 0.4rem;
+}
+
+/* ─── Contact Form ────────────────────────────────────────────────────────── */
+.contact-form {
+  display: grid;
+  gap: 1.1rem;
+}
+
+.contact-form__row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.contact-form__field {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.contact-form__field span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: rgba(220, 235, 255, 0.6);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+}
+
+.contact-form__field input,
+.contact-form__field textarea {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border-radius: 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 0.95rem;
+  resize: vertical;
+  transition: border-color 200ms ease, background 200ms ease;
+}
+
+.contact-form__field input::placeholder,
+.contact-form__field textarea::placeholder {
+  color: rgba(220, 233, 255, 0.34);
+}
+
+.contact-form__field input:focus,
+.contact-form__field textarea:focus {
+  outline: none;
+  border-color: rgba(123, 220, 255, 0.5);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.contact-form__field--message textarea {
+  min-height: 7rem;
+}
+
+.contact-form__submit {
+  justify-self: start;
+}
+
+.contact-form__spinner {
+  animation: contactSpin 0.9s linear infinite;
+}
+
+@keyframes contactSpin {
+  to { transform: rotate(360deg); }
+}
+
+.contact-form__error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  color: var(--accent-pink);
+  font-size: 0.88rem;
+}
+
+.contact-form__done {
+  display: grid;
+  justify-items: center;
+  gap: 0.9rem;
+  padding: 1.5rem 0.5rem;
+  text-align: center;
+}
+
+.contact-form__done-icon {
+  font-size: 2.2rem;
+  color: var(--accent-cyan);
+}
+
+.contact-form__done p {
+  margin: 0;
+  max-width: 26rem;
+  color: var(--text-muted);
+  line-height: 1.68;
+}
+
+@media (max-width: 600px) {
+  .contact-form__row {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ─── Reveal Animation Classes ────────────────────────────────────────────── */
@@ -2181,17 +2372,6 @@ main {
   border-color: rgba(123, 220, 255, 0.35);
   background: rgba(123, 220, 255, 0.1);
   color: var(--accent-cyan);
-}
-
-/* Below this width the left gutter beside the centered content column is too
-   narrow for the rail — it would overlap the hero title / nav. Most common
-   laptop resolutions (1280/1366/1440) fall under this, so the rail only
-   shows on genuinely wide desktop viewports; social links remain reachable
-   via the footer and (below 1120px) the mobile nav drawer. */
-@media (max-width: 1450px) {
-  .social-rail {
-    display: none;
-  }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -2472,9 +2652,14 @@ main {
   .timeline-step,
   .resume-copy,
   .resume-preview,
-  .contact-card {
+  .contact-copy,
+  .contact-form-panel {
     padding: 1.3rem;
     border-radius: 1.3rem;
+  }
+
+  .contact-layout {
+    grid-template-columns: 1fr;
   }
 
   .footer-badge,
@@ -2504,10 +2689,6 @@ main {
 }
 
 @media (max-width: 480px) {
-  .section-heading h2,
-  .contact-card h2 {
-    font-size: clamp(1.8rem, 7vw, 2.8rem);
-  }
 
   .techstack-stage {
     height: clamp(24rem, 60vh, 36rem);
@@ -2571,7 +2752,6 @@ main {
   .glass-card,
   .button,
   .topbar-cta,
-  .social-rail__item,
   .service-card__icon,
   .project-card__link,
   .arch-slide__frame {

@@ -22,6 +22,7 @@ import { FaMedium } from "react-icons/fa6";
 // is split into a separate chunk and only fetched when the user scrolls near the Stack section.
 const TechStack = lazy(() => import("./components/TechStack"));
 import ParallaxBackground from "./components/ParallaxBackground";
+import ContactForm from "./components/ContactForm";
 import "./App.css";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
@@ -78,12 +79,13 @@ const experience: {
   {
     role: "SDE Intern",
     org: "Inspira",
-    dates: "2026 · 6 Weeks",
-    summary: "During my six weeks at Inspira, I shipped real production code — a Flutter mobile app, secure authentication, and backend APIs that are live today.",
+    dates: "May 2026 – Jul 2026 · 3 Months",
+    summary: "Over three months at Inspira, I shipped real production code — a Flutter mobile app, secure authentication, backend APIs, and internal automation that are live today.",
     bullets: [
-      "Built the Flutter frontend from scratch, including a reusable design-token system so every screen stayed pixel-accurate and consistent.",
-      "Implemented JWT authentication end-to-end — initialising tokens, storing them securely, and handling refresh so sessions never broke.",
-      "Extended the existing FastAPI backend with new chart-data endpoints that power the analytics dashboard.",
+      "Built the Flutter frontend from scratch, introducing a reusable 3-part design-token system (color, spacing, typography) for pixel-accurate theming.",
+      "Implemented a 3-stage JWT authentication flow — initialisation, secure storage, and refresh handling — so sessions never broke.",
+      "Collaborated with backend engineers to extend a FastAPI analytics dashboard with new chart-data endpoints.",
+      "Orchestrated internal workflows and notifications with n8n, connecting FastAPI events to third-party integrations.",
     ],
   },
   {
@@ -92,8 +94,8 @@ const experience: {
     dates: "Sep 2023 – Present",
     summary: "I built this alone and I'm still running it today — a live platform that generates real revenue, not a class project.",
     bullets: [
-      "Holds 99%+ uptime for 500+ concurrent users and brings in ₹10,000+ every month, with no outside IT support.",
-      "Automated content delivery with Python and Bash scripts, which got 95% of users on board within two weeks of launch.",
+      "Holds 99%+ uptime for 500+ active students with a 97% success rate, and no outside IT support.",
+      "Generates ₹10,000+ in monthly revenue while automating notification delivery with Python and Bash — 95% adoption within two weeks of launch.",
       "I handle the entire production lifecycle myself — reverse proxy configuration, SSL certificates, DNS, and every deployment.",
     ],
   },
@@ -121,34 +123,34 @@ const projects: {
     tech: ["Linux", "Nginx", "Python", "Bash", "Certbot", "DNS", "Cron Jobs"],
     highlights: ["Runs on a self-managed Linux setup", "Student-focused delivery flow", "Stable operations with zero external IT support"],
     link: "https://github.com/Vraj26shah/vitbsmashers",
-    liveUrl: "https://vitbsmasher.vercel.app/",
-    imageSrc: "/project-screenshot-03.png",
-    imageAlt: "ScholarStack project architecture screenshot",
+    liveUrl: "https://scholarstack.vercel.app/",
+    imageSrc: "/project-screenshot-scholarstack.svg",
+    imageAlt: "ScholarStack project architecture diagram",
   },
   {
     index: "02",
-    category: "Secure Workflow Orchestration",
+    category: "Multi-Agent Orchestration",
     title: "AgentForge",
-    description: "A secure workflow platform using signed intent tokens and real-time policy checks so multiple services can operate safely and transparently.",
-    insight: "Four specialised agents work through a single orchestration layer that logs everything and fails safely the moment something looks wrong.",
-    tech: ["FastAPI", "React", "TypeScript", "Docker", "SpacetimeDB", "JWT"],
-    highlights: ["Planner and tool agents coordinated centrally", "Realtime task state and audits", "Security checks before execution"],
+    description: "A 4-agent orchestration pipeline — Analyzer, Executor, Validator, Reporter — coordinating in real time over WebSockets via SpacetimeDB, with two LLM backends behind automatic fallback.",
+    insight: "Ollama and Gemini sit behind an automatic fallback chain with role-based access control, and every one of the 4 agents runs an intent-verification check before it's allowed to act.",
+    tech: ["FastAPI", "React", "TypeScript", "Docker", "SpacetimeDB", "Ollama", "Gemini", "JWT"],
+    highlights: ["4-agent pipeline: Analyzer, Executor, Validator, Reporter", "Ollama + Gemini fallback with role-based access control", "Containerized with Docker, deployed live on Render"],
     link: "https://github.com/Vraj26shah/agentforge",
     liveUrl: "https://agentforges.onrender.com/",
-    imageSrc: "/project-screenshot-02.png",
-    imageAlt: "AgentForge project architecture screenshot",
+    imageSrc: "/project-screenshot-agentforge.svg",
+    imageAlt: "AgentForge 4-agent orchestration architecture diagram",
   },
   {
     index: "03",
     category: "Infrastructure & CI/CD",
-    title: "DevOps Engineering Lab",
-    description: "A full CI/CD pipeline on AWS EC2, using Docker for containers and Prometheus with Grafana for monitoring, so deployments and alerts happen automatically.",
-    insight: "Built to prove a point: good delivery automation makes systems repeatable and easy to observe, not just faster to ship.",
-    tech: ["Docker", "GitHub Actions", "Prometheus", "Grafana", "AWS EC2", "Bash"],
-    highlights: ["CI build and publish workflow", "Monitoring stack on EC2", "Metrics, dashboards, and alerts in one flow"],
+    title: "Cloud Engineering Lab",
+    description: "A containerized multi-service Python system with a 5-stage GitHub Actions pipeline — lint, test, build, push, deploy — cutting environment setup from 3+ hours to under 3 minutes with zero manual steps.",
+    insight: "Built to prove a point: good delivery automation makes systems repeatable and observable, not just faster to ship. The AWS EC2 host is hardened with SSH and fail2ban, then monitored with a Prometheus and Grafana stack.",
+    tech: ["Docker", "GitHub Actions", "Prometheus", "Grafana", "AWS EC2", "fail2ban", "Bash"],
+    highlights: ["5-stage CI/CD: lint, test, build, push, deploy", "Setup time cut from 3+ hours to under 3 minutes", "AWS hardened with SSH + fail2ban, monitored via Prometheus/Grafana"],
     link: "https://github.com/Vraj26shah/Devops-aws-",
-    imageSrc: "/project-screenshot-05.png",
-    imageAlt: "DevOps Engineering Lab project architecture screenshot",
+    imageSrc: "/project-screenshot-cloudlab.svg",
+    imageAlt: "Cloud Engineering Lab CI/CD and monitoring architecture diagram",
   },
   {
     index: "04",
@@ -159,21 +161,21 @@ const projects: {
     tech: ["Python", "Scapy", "Wireshark", "TCP/IP", "ARP", "Nmap"],
     highlights: ["Raw frame capture and parsing", "Spoof detection through ARP mismatch analysis", "Charts, logs, and pcap export from one CLI"],
     link: "https://github.com/Vraj26shah/NetworkAnalyzer",
-    imageSrc: "/project-screenshot-04.png",
-    imageAlt: "Network Traffic Analyser project architecture screenshot",
+    imageSrc: "/project-screenshot-network.svg",
+    imageAlt: "Network Traffic Analyser packet capture and anomaly detection architecture diagram",
   },
   {
     index: "05",
-    category: "Research & Machine Learning",
-    title: "Mentorship Algorithm",
-    description: "A mentor-matching engine that uses decision trees and genetic programming to recommend the right pairing, built out of a research paper I co-authored.",
-    insight: "This one is about the reasoning underneath, not the interface — how the matching logic actually decides who gets paired with whom.",
-    tech: ["Decision Trees", "Genetic Programming", "Python", "Data Profiling"],
-    highlights: ["Research-driven recommendation logic", "Structured profiling and matching flow", "Decision-focused architecture thinking"],
+    category: "Mentor-Matching Platform",
+    title: "Father's Advice",
+    description: "A 1-on-1 mentor-matching platform live with 4,800+ vetted mentors, 32,000+ sessions run, and a 98% resolution rate — architected as 5 concurrent microservices (4 Python, 1 Node.js) with MongoDB persistence and an Express.js/EJS frontend.",
+    insight: "Gemini-based doubt analysis drives the automated matching underneath, using decision trees and genetic programming — the same logic that became the basis of a published peer-reviewed research paper.",
+    tech: ["Python", "Node.js", "MongoDB", "Express.js", "EJS", "Gemini", "Decision Trees", "Genetic Programming"],
+    highlights: ["4,800+ vetted mentors, 32,000+ sessions, 98% resolution rate", "5 concurrent microservices (4 Python, 1 Node.js)", "Gemini-based doubt analysis driving automated matching"],
     link: "https://github.com/Vraj26shah/fathersadvice_final",
     liveUrl: "https://fathersadvice-final.onrender.com",
     imageSrc: "/project-screenshot-mentorship.svg",
-    imageAlt: "Mentorship Algorithm project architecture diagram",
+    imageAlt: "Father's Advice mentor-matching architecture diagram",
   },
   {
     index: "06",
@@ -184,8 +186,8 @@ const projects: {
     tech: ["Node.js", "React", "JavaScript", "REST API", "MongoDB"],
     highlights: ["Separate patient and provider flows", "Role-aware frontend and API design", "Structured backend and data handling"],
     link: "https://github.com/Vraj26shah/mediguard",
-    imageSrc: "/project-screenshot-06.png",
-    imageAlt: "MediGuard healthcare app architecture screenshot",
+    imageSrc: "/project-screenshot-mediguard.svg",
+    imageAlt: "MediGuard healthcare app architecture diagram",
   },
   {
     index: "07",
@@ -764,25 +766,6 @@ export default function App() {
             </div>
           </nav>
 
-          <aside className="social-rail" aria-label="Social links">
-            {socialLinks.map((link) => {
-              const Icon = link.icon;
-              return (
-                <a
-                  key={link.label}
-                  className="social-rail__item"
-                  href={link.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={link.label}
-                  title={link.label}
-                >
-                  <Icon />
-                </a>
-              );
-            })}
-          </aside>
-
           <main>
             {/* ── Hero Introduction ─────────────────────────────────────────── */}
             <section id="home" className="hero-section">
@@ -1003,11 +986,15 @@ export default function App() {
                 <div className="story-notes">
                   <article className="story-note glass-card reveal-up">
                     <strong>Solvit Hackathon Finalist</strong>
-                    <p>Designed and shipped a responsive municipal-services interface in just 12 hours, finishing as a finalist and lifting live-demo engagement by 35%.</p>
+                    <p>Designed and shipped a responsive municipal-services interface in just 12 hours, finishing as a finalist and cutting complaint resolution time by 40%.</p>
                   </article>
                   <article className="story-note glass-card reveal-up">
-                    <strong>CGPA 8.75 · Always building outside class</strong>
+                    <strong>CGPA 8.56 · Always building outside class</strong>
                     <p>Studying at VIT Bhopal, and outside of class I'm digging into Kubernetes, CTF challenges, and blockchain consensus.</p>
+                  </article>
+                  <article className="story-note glass-card reveal-up">
+                    <strong>2 Papers · 3rd Rank District Chess</strong>
+                    <p>Published 2 peer-reviewed research papers and 40+ technical articles, and placed 3rd at the District Chess Championship en route to the Gujarat State Championship.</p>
                   </article>
                 </div>
               </div>
@@ -1102,13 +1089,13 @@ export default function App() {
               <div className="resume-layout">
                 <div className="resume-copy glass-card reveal-up">
                   <span className="resume-copy__label">Resume</span>
-                  <h3>B.Tech CS · VIT Bhopal · CGPA 8.75</h3>
+                  <h3>B.Tech CS · VIT Bhopal · CGPA 8.56</h3>
                   <p>
                     I'm open to internships and full-time roles in cloud infrastructure, DevOps, security, and full-stack development.
                   </p>
 
                   <div className="resume-actions">
-                    <a className="button button--primary" href="https://drive.google.com/file/d/1Da7fbSMTyYshX6KQ6iC4eOr9vYaJYfqk/view?usp=sharing" target="_blank" rel="noreferrer">
+                    <a className="button button--primary" href="https://drive.google.com/file/d/1cAg_I24qp29Q1MLZne6TBFABm5OJ_0F0/view?usp=drive_link" target="_blank" rel="noreferrer">
                       <FiFileText />
                       View Resume
                     </a>
@@ -1144,7 +1131,7 @@ export default function App() {
                 <div className="resume-preview glass-card reveal-up" aria-label="Resume preview">
                   <iframe
                     className="resume-preview__iframe"
-                    src="https://drive.google.com/file/d/1Da7fbSMTyYshX6KQ6iC4eOr9vYaJYfqk/preview"
+                    src="https://drive.google.com/file/d/1cAg_I24qp29Q1MLZne6TBFABm5OJ_0F0/preview"
                     title="Vraj Shah Resume"
                     allow="autoplay"
                     loading="lazy"
@@ -1155,26 +1142,38 @@ export default function App() {
 
             <div className="section-divider" aria-hidden="true" />
 
-            <section id="contact" className="contact-section">
-              <div className="contact-card glass-card reveal-up">
+            <section id="contact" className="contact-section section-shell">
+              <div className="section-heading reveal-up">
                 <p className="eyebrow">Contact</p>
                 <h2>Let's build something real.</h2>
-                <p>
-                  Whether it's cloud infrastructure, DevOps, security, or full-stack — if the problem sounds interesting, I want to hear about it.
-                </p>
+              </div>
 
-                <div className="contact-actions">
-                  <a className="button button--primary" href="mailto:vraj1012006shah@gmail.com">
-                    <FiMail />
-                    Start the conversation
-                  </a>
+              <div className="contact-layout">
+                <div className="contact-copy glass-card reveal-up">
+                  <p>
+                    Whether it's cloud infrastructure, DevOps, security, or full-stack — if the problem sounds interesting, I want to hear about it.
+                  </p>
+                  <p className="contact-copy__note">
+                    Fill in the form and I'll get an email the moment you send it — you'll get one back too, confirming it's landed with me.
+                  </p>
+
+                  <div className="contact-actions">
+                    <a className="button button--ghost" href="mailto:vraj1012006shah@gmail.com">
+                      <FiMail />
+                      Or email me directly
+                    </a>
+                  </div>
+                </div>
+
+                <div className="contact-form-panel glass-card reveal-up">
+                  <ContactForm />
                 </div>
               </div>
             </section>
 
             <footer className="footer-badge glass-card" aria-label="Footer">
               <div className="footer-badge__copy">
-                <p className="eyebrow">Vraj Shah · VIT Bhopal · CGPA 8.75</p>
+                <p className="eyebrow">Vraj Shah · VIT Bhopal · CGPA 8.56</p>
                 <strong>Linux, DevOps, cloud, networking, and full-stack — open to internships and full-time roles.</strong>
                 <span>Founder of ScholarStack · 2 peer-reviewed papers · 40+ published articles · Solvit Hackathon Finalist.</span>
               </div>
